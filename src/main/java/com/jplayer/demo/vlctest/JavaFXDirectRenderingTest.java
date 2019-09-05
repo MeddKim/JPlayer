@@ -63,7 +63,7 @@ public abstract class JavaFXDirectRenderingTest extends Application {
     /**
      * Filename of the video to play.
      */
-    private static final String VIDEO_FILE = "D:\\BaiduNetdiskDownload\\动漫\\N23858.720P\\[桜都字幕组][720P][Queen Bee]放課後Initiation VOL.1.mp4";
+    private static final String VIDEO_FILE = "D:\\BaiduNetdiskDownload\\1.mp4";
 
     /**
      * Lightweight JavaFX canvas, the video is rendered here.

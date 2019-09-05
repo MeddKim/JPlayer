@@ -36,6 +36,7 @@ public class MediaControl extends BorderPane {
     private Slider volumeSlider;
     private HBox mediaBar;
 
+
     public MediaControl(final MediaPlayer mp) {
         this.mp = mp;
         setStyle("-fx-background-color: #bfc2c7;");

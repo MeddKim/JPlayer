@@ -1,0 +1,57 @@
+.button1{
+    -fx-font: 22 arial; 
+    -fx-base: #b6e7c9;    
+}
+
+.toggle-button1{
+    -fx-base: lightgreen;
+}
+
+.toggle-button2{
+    -fx-base: lightblue;
+}
+
+.toggle-button3{
+    -fx-base: salmon;
+}
+
+.separator .line {
+    -fx-border-color: #e79423;
+    -fx-border-width: 2;
+}
+
+.tool-bar:horizontal {
+    -fx-background-color: #b3e6b3;
+}
+
+.combo-box-base  {
+    -fx-background-color: null;
+}
+
+.combo-box-base:hover  {
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 8, 0.0 , 0 , 0 );
+}
+
+.pagination {
+    -fx-border-color:  #0E5D79;
+}
+
+.pagination .page {
+    -fx-background-color: #DDF1F8;
+}
+
+.pagination .pagination-control {
+    -fx-background-color: #C8C6C6;
+}
+
+.pagination .pagination-control .bullet-button {
+    -fx-background-color: transparent, #DDF1F8, #0E5D79, white, white;
+}
+
+.pagination .pagination-control .bullet-button:selected {
+    -fx-background-color: transparent, #DDF1F8, #0E5D79, white, #0E5D79;
+}
+
+.pagination .pagination-control .left-arrow, .right-arrow{
+    -fx-background-color: #DDF1F8, #0E5D79;
+}

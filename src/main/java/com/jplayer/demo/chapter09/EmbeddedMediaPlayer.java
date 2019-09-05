@@ -13,8 +13,8 @@ import javafx.stage.Stage;
 public class EmbeddedMediaPlayer extends Application {
 
     private static final String MEDIA_URL =
-            "http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv";
-
+//            "file:///D:/11.mp4";
+"file:///D:\\BaiduNetdiskDownload\\动漫\\N23858.720P\\[桜都字幕组][720P][Queen Bee]放課後Initiation VOL.1.mp4";
     @Override
     public void start(Stage primaryStage) {
 

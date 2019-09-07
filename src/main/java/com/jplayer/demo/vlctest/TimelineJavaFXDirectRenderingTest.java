@@ -36,7 +36,7 @@ public class TimelineJavaFXDirectRenderingTest extends JavaFXDirectRenderingTest
     /**
      *
      */
-    private static final double FPS = 60.0;
+    private static final double FPS = 300.0;
 
     /**
      *
@@ -76,7 +76,7 @@ public class TimelineJavaFXDirectRenderingTest extends JavaFXDirectRenderingTest
      * @param args command-line arguments
      */
     public static void main(final String[] args) {
-        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "D:\\dev\\lib\\vlc\\x64");
+        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:\\devFile\\vlc");
         Application.launch(args);
     }
 }

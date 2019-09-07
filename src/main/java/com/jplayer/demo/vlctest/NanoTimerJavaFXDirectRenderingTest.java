@@ -61,7 +61,7 @@ public final class NanoTimerJavaFXDirectRenderingTest extends JavaFXDirectRender
      * @param args command-line arguments
      */
     public static void main(final String[] args) {
-        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "D:\\dev\\lib\\vlc\\x64");
+        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:\\devFile\\vlc");
         Application.launch(args);
     }
 }

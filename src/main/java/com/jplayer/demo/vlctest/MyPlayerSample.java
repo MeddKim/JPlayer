@@ -69,7 +69,7 @@ public class MyPlayerSample extends Application {
     }
 
     public static void main(String[] args) {
-        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:\\devFile\\vlc");
+        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "D:/dev/lib/vlc/x64");
         launch(args);
     }
 }

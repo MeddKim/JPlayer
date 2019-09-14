@@ -59,7 +59,7 @@ public class AnimationTimerJavaFXDirectRenderingTest extends JavaFXDirectRenderi
      * @param args command-line arguments
      */
     public static void main(final String[] args) {
-        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:\\devFile\\vlc");
+        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "D:/dev/lib/vlc/x64");
         Application.launch(args);
     }
 }

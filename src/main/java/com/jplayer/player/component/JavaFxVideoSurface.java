@@ -1,5 +1,7 @@
 package com.jplayer.player.component;
 
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import uk.co.caprica.vlcj.player.embedded.videosurface.CallbackVideoSurface;
 import uk.co.caprica.vlcj.player.embedded.videosurface.VideoSurfaceAdapters;
 
@@ -11,7 +13,7 @@ import uk.co.caprica.vlcj.player.embedded.videosurface.VideoSurfaceAdapters;
 public class JavaFxVideoSurface extends CallbackVideoSurface {
 
 
-    JavaFxVideoSurface(PlayEventListener listener){
-        super(new JavaFxBufferFormatCallback(listener), new JavaFxRenderCallback(listener), true, VideoSurfaceAdapters.getVideoSurfaceAdapter());
+    JavaFxVideoSurface(EventListener listener, PixelWriter pixelWriter, WritableImage img){
+        super(new JavaFxBufferFormatCallback(listener,pixelWriter,img), new JavaFxRenderCallback(listener), true, VideoSurfaceAdapters.getVideoSurfaceAdapter());
     }
 }

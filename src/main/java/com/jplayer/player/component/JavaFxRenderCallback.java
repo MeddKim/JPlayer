@@ -12,9 +12,9 @@ import java.nio.ByteBuffer;
  */
 public class JavaFxRenderCallback implements RenderCallback {
 
-    private PlayEventListener listener;
+    private EventListener listener;
 
-    JavaFxRenderCallback(PlayEventListener listener){
+    JavaFxRenderCallback(EventListener listener){
         this.listener = listener;
     }
 

@@ -6,10 +6,10 @@ import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormat;
 import java.nio.ByteBuffer;
 
 /**
- * @author Willard
- * @date 2019/9/6
+ * @author Wyatt
+ * @date 2019-09-14
  */
-public interface PlayEventListener {
+public interface EventListener {
     void display(MediaPlayer mediaPlayer, ByteBuffer[] nativeBuffers, BufferFormat bufferFormat);
     void bufferFormat(int sourceWidth, int sourceHeight);
 }

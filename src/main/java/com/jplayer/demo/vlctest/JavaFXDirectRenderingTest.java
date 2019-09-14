@@ -64,8 +64,7 @@ public abstract class JavaFXDirectRenderingTest extends Application {
      * Filename of the video to play.
      */
 //    private static final String VIDEO_FILE = "C:\\devFile\\操作系统原理02.wmv";
-    private static final String VIDEO_FILE = "C:\\hk\\4K Canada.webm";
-
+    private static final String VIDEO_FILE = "D:\\2.mp4";
     /**
      * Lightweight JavaFX canvas, the video is rendered here.
      */

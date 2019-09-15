@@ -1,4 +1,4 @@
-package com.jplayer;
+package com.jplayer.player.component;
 
 import com.jplayer.player.component.EventListener;
 import com.jplayer.player.component.VlcMediaPlayer;
@@ -27,10 +27,10 @@ public class MainApplication extends Application implements EventListener {
     public void start(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
         VlcMediaPlayer mediaPlayer = new VlcMediaPlayer(this);
-        Scene scene = new Scene(mediaPlayer, Color.BLACK);
+        Scene scene = new Scene(mediaPlayer);
         stage.setScene(scene);
         stage.show();
-
+        stage.setMaximized(true);
         mediaPlayer.startPlay();
 
         timer = new AnimationTimer() {
@@ -54,7 +54,7 @@ public class MainApplication extends Application implements EventListener {
 
     @Override
     public void bufferFormat(int sourceWidth, int sourceHeight) {
-        this.stage.setHeight(sourceHeight);
-        this.stage.setWidth(sourceWidth);
+//        this.stage.setHeight(sourceHeight);
+//        this.stage.setWidth(sourceWidth);
     }
 }

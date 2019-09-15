@@ -1,0 +1,12 @@
+.exit_btn{
+    -fx-graphic: url("../images/exit.png");
+    -fx-background-color:transparent;
+    -fx-opacity: 1;
+}
+
+.exit_btn:hover {
+    -fx-opacity: 0.5;
+}
+.exit_btn:pressed {
+    -fx-opacity: 0.2;
+}

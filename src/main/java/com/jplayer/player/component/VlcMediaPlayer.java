@@ -4,6 +4,7 @@ import com.jplayer.demo.vlctest.JavaFXDirectRenderingTest;
 import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Slider;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -66,6 +67,7 @@ public class VlcMediaPlayer extends BorderPane{
 
     public VlcMediaPlayer(EventListener eventListener){
         canvas = new Canvas();
+        Slider slider = new Slider(1, 11, 1);
 
         pixelWriter = canvas.getGraphicsContext2D().getPixelWriter();
         pixelFormat = PixelFormat.getByteBgraInstance();
@@ -75,10 +77,8 @@ public class VlcMediaPlayer extends BorderPane{
 
         mediaPlayer.videoSurface().set(new JavaFxVideoSurface(eventListener));
         this.setCenter(canvas);
-
-        setCenter(canvas);
-
-        canvas.widthProperty().bind(this.widthProperty());
+        this.setBottom(slider);
+        canvas.widthProperty().bind(this.widthProperty() );
         canvas.heightProperty().bind(this.heightProperty());
     }
 

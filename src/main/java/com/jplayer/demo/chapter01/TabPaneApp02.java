@@ -19,7 +19,7 @@ import java.io.InputStream;
  * @author Wyatt
  * @date 2019-09-15
  */
-public class TabPaneApp extends Application {
+public class TabPaneApp02 extends Application {
 
     private TabPane tabPane;
     private Tab tab1;

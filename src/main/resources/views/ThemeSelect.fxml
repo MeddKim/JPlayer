@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.202" xmlns:fx="http://javafx.com/fxml/1"
-            stylesheets="/styles/theme-select.css"
-            fx:controller="com.jplayer.player.controller.ThemeSelectController">
-   <top>
-       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-           <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
-       </HBox>
-   </top>
-   <center>
+<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="/styles/theme-select.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jplayer.player.controller.ThemeSelectController">
 
+    <center>
+        <TabPane>
+            <Tab text="测试一" >
+                
+            </Tab>
+            <Tab text="测试二" />
+            <Tab text="测试三" />
+        </TabPane>
    </center>
    <bottom>
-      <Button mnemonicParsing="false" BorderPane.alignment="CENTER_RIGHT" styleClass="exit_btn" onAction="#closeSystem"/>
+      <Button mnemonicParsing="false" onAction="#closeSystem" styleClass="exit_btn" BorderPane.alignment="CENTER_RIGHT" />
    </bottom>
 </BorderPane>

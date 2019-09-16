@@ -2,6 +2,7 @@
     -fx-graphic: url("../images/exit.png");
     -fx-background-color:transparent;
     -fx-opacity: 1;
+    -fx-end-margin: 100,100,100,0;
 }
 
 .exit_btn:hover {
@@ -9,4 +10,48 @@
 }
 .exit_btn:pressed {
     -fx-opacity: 0.2;
+}
+
+.tab-pane .tab-header-area {
+
+    -fx-padding: 20 20 20 20;
+}
+
+.tab-pane .tab-header-area .headers-region .tab {
+    -fx-padding: 20 20 20 20;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane
+{
+    -fx-tab-min-width:90px;
+}
+
+.tab{
+    -fx-background-insets: 0 1 0 1,0,0;
+}
+.tab-pane .tab
+{
+    -fx-background-color: #e6e6e6;
+
+}
+
+.tab-pane .tab:selected
+{
+    -fx-background-color: #3c3c3c;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #828282;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #96b946;
 }

@@ -36,7 +36,6 @@ public class ThemeSelectController{
     private void setModules(){
 
         final EventHandler<MouseEvent> myHandler = new EventHandler<MouseEvent>(){
-
             @Override
             public void handle(MouseEvent event) {
                 Button x = (Button) event.getSource();

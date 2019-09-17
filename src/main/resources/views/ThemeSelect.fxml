@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 
 <BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="/styles/theme-select.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jplayer.player.controller.ThemeSelectController">
+    <top>
+        <!--<HBox alignment="CENTER" fx:id="moduleHBox" styleClass="hbox">-->
 
+        <!--</HBox>-->
+        <!--<Button styleClass="hbtn"> </Button>-->
+        <HBox alignment="CENTER" styleClass="module-box" fx:id="moduleBox" spacing="30">
+        </HBox>
+    </top>
     <center>
-        <TabPane>
-            <Tab text="测试一" >
-                
-            </Tab>
-            <Tab text="测试二" />
-            <Tab text="测试三" />
-        </TabPane>
+        <HBox alignment="CENTER" styleClass="theme-box" fx:id="themeBox" spacing="30">
+
+        </HBox>
    </center>
    <bottom>
       <Button mnemonicParsing="false" onAction="#closeSystem" styleClass="exit_btn" BorderPane.alignment="CENTER_RIGHT" />

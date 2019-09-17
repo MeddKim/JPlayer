@@ -80,20 +80,31 @@ public class ThemeSelectController{
         int three = i + 4;
         Image img1 = new Image(getClass().getResourceAsStream("/demo/chapter03/fw"+ one +".jpg"));
         ImageView view1 = new ImageView(img1);
+        view1.setOpacity(0.5);
 
         Image img2 = new Image(getClass().getResourceAsStream("/demo/chapter03/fw"+ two +".jpg"));
         ImageView view2 = new ImageView(img2);
+        view2.setOpacity(0.5);
 
         Image img3 = new Image(getClass().getResourceAsStream("/demo/chapter03/fw"+ three +".jpg"));
         ImageView view3 = new ImageView(img3);
+        view3.setOpacity(0.5);
 
         themeBox.getChildren().add(view1);
         themeBox.getChildren().add(view2);
         themeBox.getChildren().add(view3);
 
-        view1.setOnMouseClicked(event -> {
-            System.out.println("点击");
+
+        view1.setOnMouseEntered(event -> {
+            ImageView view = (ImageView)event.getSource();
+            view.setOpacity(1.0);
         });
+
+        view1.setOnMouseExited(event -> {
+            ImageView view = (ImageView)event.getSource();
+            view.setOpacity(0.5);
+        });
+
     }
 
     public static void main(String[] args) throws IOException {

@@ -22,12 +22,9 @@
     -fx-background-radius: 10;
 }
 
-/*.module-box .button:hover{*/
-    /*-fx-border-color: red;*/
-    /*-fx-border-width: 5px;*/
-/*}*/
-.imageView{
-    -fx-border-color: red;
-    -fx-border-width: 5px;
-    -fx-background-radius: 10;
+.theme-box .imageView{
+    -fx-background-opacity: 0.0;
+}
+.theme-box .imageView:hover{
+    -fx-background-opacity: 1.0;
 }

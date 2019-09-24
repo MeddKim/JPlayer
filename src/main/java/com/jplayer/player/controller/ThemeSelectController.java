@@ -80,18 +80,28 @@ public class ThemeSelectController{
         Image img1 = new Image(getClass().getResourceAsStream("/demo/chapter03/fw"+ one +".jpg"));
         ImageView view1 = new ImageView(img1);
         view1.setOpacity(0.5);
+        view1.setId("v111");
 
         Image img2 = new Image(getClass().getResourceAsStream("/demo/chapter03/fw"+ two +".jpg"));
         ImageView view2 = new ImageView(img2);
         view2.setOpacity(0.5);
+        view1.setId("v222");
 
         Image img3 = new Image(getClass().getResourceAsStream("/demo/chapter03/fw"+ three +".jpg"));
         ImageView view3 = new ImageView(img3);
         view3.setOpacity(0.5);
+        view1.setId("v333");
 
         themeBox.getChildren().add(view1);
         themeBox.getChildren().add(view2);
         themeBox.getChildren().add(view3);
+
+        final EventHandler<MouseEvent> courseHandler = new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("点击事件");
+            }
+        };
 
 
         view1.setOnMouseEntered(event -> {
@@ -104,10 +114,37 @@ public class ThemeSelectController{
             view.setOpacity(0.5);
         });
 
+        view2.setOnMouseEntered(event -> {
+            ImageView view = (ImageView)event.getSource();
+            view.setOpacity(1.0);
+        });
+
+        view2.setOnMouseExited(event -> {
+            ImageView view = (ImageView)event.getSource();
+            view.setOpacity(0.5);
+        });
+
+        view3.setOnMouseEntered(event -> {
+            ImageView view = (ImageView)event.getSource();
+            view.setOpacity(1.0);
+        });
+
+        view3.setOnMouseExited(event -> {
+            ImageView view = (ImageView)event.getSource();
+            view.setOpacity(0.5);
+        });
+
+        view1.setOnMouseClicked(courseHandler);
+        view2.setOnMouseClicked(courseHandler);
+        view3.setOnMouseClicked(courseHandler);
     }
+
+
 
     public static void main(String[] args) throws IOException {
         System.out.println(new File("").getCanonicalPath());
     }
+
+
 
 }

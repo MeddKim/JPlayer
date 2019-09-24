@@ -17,12 +17,14 @@ public class MainLauncher extends Application {
     /**
      * 主舞台
      */
-    private static Stage primaryStageObj;
+    public static Stage primaryStageObj;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStageObj = primaryStage;
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("views/ThemeSelect.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("views/ThemeSelect.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("views/CourseMain.fxml"));
+
         Scene mainScene = new Scene(root);
         //最大化窗口
         primaryStage.setMaximized(true);

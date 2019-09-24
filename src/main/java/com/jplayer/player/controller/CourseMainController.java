@@ -1,7 +1,9 @@
 package com.jplayer.player.controller;
 
+import com.jplayer.player.component.VlcMediaPlayer1;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -11,6 +13,8 @@ import javafx.scene.layout.VBox;
 public class CourseMainController {
     @FXML
     private VBox chapterBox;
+    @FXML
+    private BorderPane vlcMediaPlayer1;
 
     public void initialize() {
         setChapter();

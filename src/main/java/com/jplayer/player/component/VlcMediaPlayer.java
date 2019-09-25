@@ -32,8 +32,8 @@ import java.util.concurrent.Semaphore;
 public class VlcMediaPlayer extends BorderPane{
 
 
-//    private String VIDEO_FILE = "C:\\devFile\\操作系统原理02.wmv";
-    private String VIDEO_FILE = "D:\\2.mp4";
+    private String VIDEO_FILE = "C:\\devFile\\操作系统原理02.wmv";
+//    private String VIDEO_FILE = "D:\\2.mp4";
     /**
      * canva画布，视频将输出到此处
      */
@@ -78,7 +78,7 @@ public class VlcMediaPlayer extends BorderPane{
         mediaPlayer.videoSurface().set(new JavaFxVideoSurface(eventListener));
         this.setCenter(canvas);
         this.setBottom(slider);
-        canvas.widthProperty().bind(this.widthProperty() );
+        canvas.widthProperty().bind(this.widthProperty());
         canvas.heightProperty().bind(this.heightProperty());
     }
 

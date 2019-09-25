@@ -27,10 +27,11 @@ public class MainApplication extends Application implements EventListener {
     public void start(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
         VlcMediaPlayer mediaPlayer = new VlcMediaPlayer(this);
-        Scene scene = new Scene(mediaPlayer);
+        Scene scene = new Scene(mediaPlayer,800,600);
         stage.setScene(scene);
         stage.show();
-        stage.setMaximized(true);
+//        stage.setMaximized(true);
+
         mediaPlayer.startPlay();
 
         timer = new AnimationTimer() {
@@ -43,7 +44,7 @@ public class MainApplication extends Application implements EventListener {
     }
 
     public static void main(String[] args) {
-        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "D:/dev/lib/vlc/x64");
+        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:\\devFile\\vlc");
         launch(args);
     }
 

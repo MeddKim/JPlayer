@@ -1,8 +1,9 @@
 package com.jplayer.player.controller;
 
-import com.jplayer.player.component.VlcMediaPlayer1;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -14,13 +15,19 @@ public class CourseMainController {
     @FXML
     private VBox chapterBox;
     @FXML
-    private BorderPane vlcMediaPlayer1;
+    private BorderPane centerPane;
 
     public void initialize() {
+        Image img1 = new Image(getClass().getResourceAsStream("/images/test.jpg"));
+        ImageView view1 = new ImageView(img1);
+        this.centerPane.setCenter(view1);
         setChapter();
     }
     void setChapter(){
         Button btn1 = new Button();
+        btn1.setOnMouseClicked(e->{
+            changeToVedio();
+        });
         btn1.setId("1");
         btn1.setText("视频");
 
@@ -43,6 +50,14 @@ public class CourseMainController {
         chapterBox.getChildren().add(btn3);
 
         chapterBox.getChildren().add(btn4);
+    }
+
+    private void changeToVedio(){
+        System.out.println("切换");
+//        this.centerPane = new BorderPane();
+        Image img1 = new Image(getClass().getResourceAsStream("/images/test1.jpg"));
+        ImageView view1 = new ImageView(img1);
+        this.centerPane.setCenter(view1);
     }
 
 }

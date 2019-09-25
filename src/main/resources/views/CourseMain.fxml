@@ -8,7 +8,7 @@
         </VBox>
     </left>
     <center>
-        <BorderPane fx:id="vlcMediaPlayer1"></BorderPane>
+        <BorderPane fx:id="centerPane"></BorderPane>
     </center>
     <bottom>
         <!--<Button mnemonicParsing="false" onAction="#closeSystem" styleClass="exit_btn" BorderPane.alignment="CENTER_RIGHT" />-->

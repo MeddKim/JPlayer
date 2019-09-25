@@ -1,6 +1,5 @@
 package com.jplayer.player.component;
 
-import com.jplayer.demo.vlctest.JavaFXDirectRenderingTest;
 import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,6 +9,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
@@ -30,7 +30,6 @@ import java.util.concurrent.Semaphore;
  * @date 2019/9/6
  */
 public class VlcMediaPlayer extends BorderPane{
-
 
     private String VIDEO_FILE = "C:\\devFile\\操作系统原理02.wmv";
 //    private String VIDEO_FILE = "D:\\2.mp4";

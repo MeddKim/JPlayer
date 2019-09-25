@@ -2,13 +2,12 @@
 
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="/styles/theme-select.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jplayer.player.controller.CourseMainController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" fx:id="mainPane" stylesheets="/styles/theme-select.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jplayer.player.controller.CourseMainController">
     <left>
         <VBox alignment="CENTER" styleClass="module-box" fx:id="chapterBox" spacing="30">
         </VBox>
     </left>
     <center>
-        <BorderPane fx:id="centerPane"></BorderPane>
     </center>
     <bottom>
         <!--<Button mnemonicParsing="false" onAction="#closeSystem" styleClass="exit_btn" BorderPane.alignment="CENTER_RIGHT" />-->

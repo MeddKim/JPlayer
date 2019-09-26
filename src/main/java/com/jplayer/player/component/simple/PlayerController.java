@@ -47,7 +47,9 @@ public class PlayerController {
     @FXML AnchorPane  anchorPane;
 
 
-    //控件素材图片
+    /**
+     * 控件素材图片
+     */
     private String playIcon  = getClass().getResource("/images/icon/play.png").toString();
     private String pauseIcon  = getClass().getResource("/images/icon/pause.png").toString();
     private String stopIcon  = getClass().getResource("/images/icon/stop.png").toString();
@@ -57,18 +59,45 @@ public class PlayerController {
 
     private MediaPlayer mediaPlayer;
     private Media media;
-    private String url;     //资源的url地址
-    private boolean popup;   //窗口弹出方式
-    private Scene scene ;  //父类窗口
+    /**
+     * 资源的url地址
+     */
+    private String url;
+    /**
+     * 窗口弹出方式
+     */
+    private boolean popup;
+    /**
+     * 父类窗口
+     */
+    private Scene scene ;
 
-    private boolean atEndOfMedia = false;    //记录视频是否处播放到结束
-    private final boolean repeat = false;   //记录视频是否重复播放
-    private double volumeValue;      //储存静音操作前的音量数据
-    private Duration duration ;        //记录视频持续时间
-    private int mediaHeight;        //视频资源的尺寸
+    /**
+     * 记录视频是否处播放到结束
+     */
+    private boolean atEndOfMedia = false;
+    /**
+     * 记录视频是否重复播放
+     */
+    private final boolean repeat = false;
+    /**
+     * 储存静音操作前的音量数据
+     */
+    private double volumeValue;
+    /**
+     * 记录视频持续时间
+     */
+    private Duration duration ;
+    /**
+     * 视频资源的尺寸
+     */
+    private int mediaHeight;
     private int mediaWidth;
 
-    private int currentHeight;    //当前整个播放器的尺寸
+    /**
+     * 当前整个播放器的尺寸
+     */
+    private int currentHeight;
     private int currentWidth;
 
     public void setScene(Scene scene){
@@ -76,7 +105,9 @@ public class PlayerController {
     }
 
 
-    //程序初始化：设置按钮图标
+    /**
+     * 程序初始化：设置按钮图标
+     */
     public void initialize(){
         //设置各控件图标
         setIcon(playBT,playIcon,25);
@@ -110,7 +141,11 @@ public class PlayerController {
     }
 
 
-    //设置mediaPlayer(参数：整个播放器的尺寸)
+    /**
+     * 设置mediaPlayer(参数：整个播放器的尺寸)
+     * @param width
+     * @param height
+     */
     void setMediaPlayer(int width,int height){
         mediaPlayer.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
         //视频就绪时更新 进度条 、时间标签、音量条数据,设置布局尺寸
@@ -184,11 +219,15 @@ public class PlayerController {
             }
         });
     }
-    //设置点击MediaView时暂停或开始
+
+    /**
+     * 设置点击MediaView时暂停或开始
+     */
     private void setMediaViewOnClick(){
         mediaView.setOnMouseClicked(event -> {
-            if(media == null)
+            if(media == null){
                 return;
+            }
             MediaPlayer.Status status = mediaPlayer.getStatus();
             if(status == MediaPlayer.Status.UNKNOWN || status == MediaPlayer.Status.HALTED ){
                 return;
@@ -212,13 +251,16 @@ public class PlayerController {
     //设置播放按钮动作
     private void setPlayButton(){
         playBT.setOnAction((ActionEvent e)->{
-            if(media == null)
+            if(media == null){
                 return;
+            }
             MediaPlayer.Status status = mediaPlayer.getStatus();
             if(status == MediaPlayer.Status.UNKNOWN || status == MediaPlayer.Status.HALTED ){
                 return;
             }
-            //当资源处于暂停或停止状态时
+            /**
+             * 当资源处于暂停或停止状态时
+             */
             if(status == MediaPlayer.Status.PAUSED || status == MediaPlayer.Status.READY || status == MediaPlayer.Status.STOPPED){
                 //当资源播放结束时，重绕资源
                 if(atEndOfMedia){
@@ -234,22 +276,30 @@ public class PlayerController {
         });
     }
 
-    //设置停止按钮动作
+    /**
+     * 设置停止按钮动作
+     */
     private void setStopButton(){
         stopBT.setOnAction((ActionEvent e )->{
-            if(media == null)
+            if(media == null){
                 return;
+            }
             mediaPlayer.stop();
             setIcon(playBT,playIcon,25);
         } );
     }
 
-    //设置视频进度条动作
+    /**
+     * 设置视频进度条动作
+     */
     private void setProcessSlider(){
         processSD.valueProperty().addListener(new ChangeListener<Number>(){
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if(processSD.isValueChanging()){     //加入Slider正在改变的判定，否则由于update线程的存在，mediaPlayer会不停地回绕
+                /**
+                 * 加入Slider正在改变的判定，否则由于update线程的存在，mediaPlayer会不停地回绕
+                 */
+                if(processSD.isValueChanging()){
                     mediaPlayer.seek(duration.multiply(processSD.getValue()/100.0));
                 }
             }
@@ -257,7 +307,9 @@ public class PlayerController {
     }
 
 
-    //设置最大化按钮动作
+    /**
+     * 设置最大化按钮动作
+     */
     public void setMaximizeButton(){
         maxBT.setOnAction((ActionEvent e)->{
             if(popup){
@@ -273,12 +325,14 @@ public class PlayerController {
     }
 
 
-    //设置音量按钮动作
+    /**
+     * 设置音量按钮动作
+     */
     private void setVolumeButton(){
         volumeBT.setOnAction((ActionEvent e)->{
-            if(media == null)
+            if(media == null){
                 return;
-
+            }
             if(mediaPlayer.getVolume()>0){
                 volumeValue = mediaPlayer.getVolume();
                 volumeSD.setValue(0);
@@ -291,7 +345,9 @@ public class PlayerController {
         });
     }
 
-    //设置音量滑条动作
+    /**
+     * 设置音量滑条动作
+     */
     private void setVolumeSD(){
         volumeSD.valueProperty().addListener(new ChangeListener<Number>(){
             @Override
@@ -301,21 +357,28 @@ public class PlayerController {
         });
     }
 
-    //更新视频数据（进度条 、时间标签、音量条数据）
+    /**
+     * 更新视频数据（进度条 、时间标签、音量条数据）
+     */
     protected void updateValues(){
         if(processSD != null && timeLB!=null && volumeSD != null && volumeBT != null){
             Platform.runLater(new Runnable(){
                 @Override
                 public void run() {
                     Duration currentTime = mediaPlayer.getCurrentTime();
-                    timeLB.setText(formatTime(currentTime,duration));    //设置时间标签
-                    processSD.setDisable(duration.isUnknown());   //无法读取时间是隐藏进度条
+                    //设置时间标签
+                    timeLB.setText(formatTime(currentTime,duration));
+                    //无法读取时间是隐藏进度条
+                    processSD.setDisable(duration.isUnknown());
                     if(!processSD.isDisabled() && duration.greaterThan(Duration.ZERO) && !processSD.isValueChanging()){
-                        processSD.setValue(currentTime.toMillis()/duration.toMillis() * 100);   //设置进度条
+                        //设置进度条
+                        processSD.setValue(currentTime.toMillis()/duration.toMillis() * 100);
                     }
                     if(!volumeSD.isValueChanging()){
-                        volumeSD.setValue((int)Math.round(mediaPlayer.getVolume() *100));   //设置音量条
-                        if(mediaPlayer.getVolume() == 0){        //设置音量按钮
+                        //设置音量条
+                        volumeSD.setValue((int)Math.round(mediaPlayer.getVolume() *100));
+                        //设置音量按钮
+                        if(mediaPlayer.getVolume() == 0){
                             setIcon(volumeBT,volOffIcon,20);
                         }else{
                             setIcon(volumeBT,volOnIcon,20);

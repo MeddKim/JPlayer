@@ -61,7 +61,7 @@ public class CourseMainController {
     }
 
     private void changeToVedio(){
-
+        System.out.println(System.getProperty("user.dir"));
     }
 
     private void changeToPic(){

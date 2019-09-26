@@ -8,7 +8,8 @@ import lombok.Data;
  */
 @Data
 public class ModuleInfo {
-    private Long moduleId;
+    private String moduleId;
     private String moduleName;
-    private Integer orderNum;
+    private String modulePath;
+    private String bgUrl;
 }

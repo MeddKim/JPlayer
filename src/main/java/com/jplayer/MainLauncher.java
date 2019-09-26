@@ -23,7 +23,7 @@ public class MainLauncher extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStageObj = primaryStage;
 //        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("views/ThemeSelect.fxml"));
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("views/CourseMain.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("views/ModuleSelect.fxml"));
 
         Scene mainScene = new Scene(root);
         //最大化窗口

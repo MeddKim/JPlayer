@@ -1,4 +1,4 @@
-package com.jplayer.player.component;
+package com.jplayer.player.component.vlc;
 
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormat;

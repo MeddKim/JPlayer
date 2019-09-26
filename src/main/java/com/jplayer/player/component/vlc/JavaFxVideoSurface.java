@@ -1,4 +1,4 @@
-package com.jplayer.player.component;
+package com.jplayer.player.component.vlc;
 
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;

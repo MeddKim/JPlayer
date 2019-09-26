@@ -1,12 +1,9 @@
-package com.jplayer.player.component;
+package com.jplayer.player.component.vlc;
 
-import com.jplayer.player.component.EventListener;
-import com.jplayer.player.component.VlcMediaPlayer;
 import com.sun.jna.NativeLibrary;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import uk.co.caprica.vlcj.binding.RuntimeUtil;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;

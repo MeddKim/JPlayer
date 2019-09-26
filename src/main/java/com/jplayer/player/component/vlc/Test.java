@@ -1,4 +1,4 @@
-package com.jplayer.player.component;
+package com.jplayer.player.component.vlc;
 
 import com.sun.jna.NativeLibrary;
 import uk.co.caprica.vlcj.binding.LibVlc;

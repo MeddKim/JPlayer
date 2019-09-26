@@ -1,4 +1,4 @@
-package com.jplayer.player.component;
+package com.jplayer.player.component.vlc;
 
 import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
@@ -9,7 +9,6 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
@@ -29,10 +28,11 @@ import java.util.concurrent.Semaphore;
  * @author Willard
  * @date 2019/9/6
  */
-public class VlcMediaPlayer extends BorderPane{
+public class VlcMediaPlayer1 extends BorderPane{
 
-    private String VIDEO_FILE = "C:\\devFile\\操作系统原理02.wmv";
-//    private String VIDEO_FILE = "D:\\2.mp4";
+
+//    private String VIDEO_FILE = "C:\\devFile\\操作系统原理02.wmv";
+    private String VIDEO_FILE = "D:\\2.mp4";
     /**
      * canva画布，视频将输出到此处
      */
@@ -64,7 +64,7 @@ public class VlcMediaPlayer extends BorderPane{
 
 
 
-    public VlcMediaPlayer(EventListener eventListener){
+    public VlcMediaPlayer1(){
         canvas = new Canvas();
         Slider slider = new Slider(1, 11, 1);
 
@@ -74,10 +74,10 @@ public class VlcMediaPlayer extends BorderPane{
         mediaPlayerFactory = new MediaPlayerFactory();
         mediaPlayer = mediaPlayerFactory.mediaPlayers().newEmbeddedMediaPlayer();
 
-        mediaPlayer.videoSurface().set(new JavaFxVideoSurface(eventListener));
+        mediaPlayer.videoSurface().set(new JavaFxVideoSurface());
         this.setCenter(canvas);
         this.setBottom(slider);
-        canvas.widthProperty().bind(this.widthProperty());
+        canvas.widthProperty().bind(this.widthProperty() );
         canvas.heightProperty().bind(this.heightProperty());
     }
 
@@ -94,38 +94,28 @@ public class VlcMediaPlayer extends BorderPane{
 
     private class JavaFxVideoSurface extends CallbackVideoSurface {
 
-        JavaFxVideoSurface(EventListener eventListener) {
-            super(new JavaFxBufferFormatCallback(eventListener), new JavaFxRenderCallback(eventListener), true, VideoSurfaceAdapters.getVideoSurfaceAdapter());
+        JavaFxVideoSurface() {
+            super(new JavaFxBufferFormatCallback(), new JavaFxRenderCallback(), true, VideoSurfaceAdapters.getVideoSurfaceAdapter());
         }
 
     }
 
     private class JavaFxBufferFormatCallback implements BufferFormatCallback {
-        EventListener eventListener;
-        JavaFxBufferFormatCallback(EventListener eventListener){
-            this.eventListener = eventListener;
-        }
         @Override
         public BufferFormat getBufferFormat(int sourceWidth, int sourceHeight) {
-            VlcMediaPlayer.this.img = new WritableImage(sourceWidth, sourceHeight);
-            VlcMediaPlayer.this.pixelWriter = img.getPixelWriter();
+            VlcMediaPlayer1.this.img = new WritableImage(sourceWidth, sourceHeight);
+            VlcMediaPlayer1.this.pixelWriter = img.getPixelWriter();
 
             Platform.runLater(()->{
-                eventListener.bufferFormat(sourceWidth,sourceHeight);
             });
             return new RV32BufferFormat(sourceWidth, sourceHeight);
         }
     }
 
     private class JavaFxRenderCallback implements RenderCallback {
-        EventListener eventListener;
-        JavaFxRenderCallback(EventListener eventListener){
-            this.eventListener = eventListener;
-        }
         @Override
         public void display(MediaPlayer mediaPlayer, ByteBuffer[] nativeBuffers, BufferFormat bufferFormat) {
             try {
-                this.eventListener.display(mediaPlayer,nativeBuffers,bufferFormat);
                 semaphore.acquire();
                 pixelWriter.setPixels(0, 0, bufferFormat.getWidth(), bufferFormat.getHeight(), pixelFormat, nativeBuffers[0], bufferFormat.getPitches()[0]);
                 semaphore.release();

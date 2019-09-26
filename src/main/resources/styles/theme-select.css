@@ -5,6 +5,15 @@
     -fx-end-margin: 100,100,100,0;
 }
 
+.home_btn{
+    -fx-graphic: url("../images/home.png");
+    -fx-background-color:transparent;
+    -fx-opacity: 1;
+    -fx-end-margin: 100,100,100,0;
+}
+
+
+
 .exit_btn:hover {
     -fx-opacity: 0.5;
 }

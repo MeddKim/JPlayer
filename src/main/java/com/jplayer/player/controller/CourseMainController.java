@@ -2,6 +2,7 @@ package com.jplayer.player.controller;
 
 import com.jplayer.player.component.simple.SimpleMediaPlayer;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
@@ -21,9 +22,9 @@ public class CourseMainController {
 
     public void initialize() {
         this.setChapter();
-//        this.simpleMediaPlayer = SimpleMediaPlayer.newInstance("file:///C:/hk/test.mp4");
-//        BorderPane.setAlignment(simpleMediaPlayer, Pos.CENTER);
-//        this.mainPane.setCenter(simpleMediaPlayer);
+        this.simpleMediaPlayer = SimpleMediaPlayer.newInstance("file:///C:/hk/test.mp4");
+        this.simpleMediaPlayer.setPadding(new Insets(200.00,200.00,200.00,200.00));
+        this.mainPane.setCenter(simpleMediaPlayer);
 
     }
     void setChapter(){

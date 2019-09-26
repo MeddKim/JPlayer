@@ -1,8 +1,6 @@
 package com.jplayer.player.controller;
 
-import com.jplayer.player.component.EventListener;
-import com.jplayer.player.component.VlcMediaPlayer;
-import com.sun.jna.NativeLibrary;
+import com.jplayer.player.component.media.ProtoMediaPlayer;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,35 +8,23 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import uk.co.caprica.vlcj.binding.RuntimeUtil;
-import uk.co.caprica.vlcj.player.base.MediaPlayer;
-import uk.co.caprica.vlcj.player.embedded.videosurface.callback.BufferFormat;
-
-import java.nio.ByteBuffer;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 /**
  * @author Willard
  * @date 2019/9/24
  */
-public class CourseMainController implements EventListener {
+public class CourseMainController {
     @FXML
     private BorderPane mainPane;
-    private VlcMediaPlayer mediaPlayer;
-    private AnimationTimer timer;
-
     @FXML
     private VBox chapterBox;
 
+    private AnimationTimer timer;
+    private ProtoMediaPlayer mediaPlayerPane;
+
     public void initialize() {
-        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:\\devFile\\vlc");
-
-        this.timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                mediaPlayer.renderFrame();
-            }
-        };
-
         BorderPane centerPane = new BorderPane();
         Image img1 = new Image(getClass().getResourceAsStream("/images/test.jpg"));
         ImageView view1 = new ImageView(img1);
@@ -81,17 +67,12 @@ public class CourseMainController implements EventListener {
     }
 
     private void changeToVedio(){
-        NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:\\devFile\\vlc");
-
-        mediaPlayer = new VlcMediaPlayer(this);
-
-        this.mainPane.setCenter(mediaPlayer);
-        this.mediaPlayer.startPlay();
-        this.timer.start();
+        MediaPlayer mediaPlayer = new MediaPlayer(new Media("file:///C:/hk/test.mp4"));
+        this.mediaPlayerPane = new ProtoMediaPlayer(mediaPlayer);
+        this.mainPane.setCenter(mediaPlayerPane);
     }
 
     private void changeToPic(){
-        this.mediaPlayer.stopPlay();
         this.timer.stop();
 
         BorderPane centerPane1 = new BorderPane();
@@ -101,13 +82,4 @@ public class CourseMainController implements EventListener {
         this.mainPane.setCenter(centerPane1);
     }
 
-    @Override
-    public void display(MediaPlayer mediaPlayer, ByteBuffer[] nativeBuffers, BufferFormat bufferFormat) {
-
-    }
-
-    @Override
-    public void bufferFormat(int sourceWidth, int sourceHeight) {
-
-    }
 }

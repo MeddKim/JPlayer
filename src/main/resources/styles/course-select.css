@@ -1,0 +1,26 @@
+
+.main-pane{
+    -fx-background-image: url("../images/global_bg.png");
+}
+.theme-box{
+    -fx-padding: 100,20,100,20;
+}
+
+.theme-box .toggle-button{
+    -fx-background-color: rgba(23,200,230,0);
+    -fx-background-insets: 0;
+    -fx-font-size: 20;
+    -fx-padding: 15;
+}
+
+.theme-box .toggle-button:selected{
+    -fx-font-size: 25;
+    -fx-font-weight: bold;
+}
+
+.exit_btn{
+    -fx-graphic: url("../images/exit.png");
+    -fx-background-color:transparent;
+    -fx-opacity: 1;
+    -fx-end-margin: 100,100,100,0;
+}

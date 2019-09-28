@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
@@ -37,19 +38,21 @@ public class CourseMainController {
     @FXML
     private HBox containerBox;
 
+    private Scene scene;
+
     private int defaultChapter = 0;
 
     private SimpleMediaPlayer simpleMediaPlayer;
 
     public void initialize() {
-//        this.setChapter();
-//        this.simpleMediaPlayer = SimpleMediaPlayer.newInstance("file:///C:/hk/test.mp4");
-//        this.simpleMediaPlayer.setPadding(new Insets(200.00,200.00,200.00,200.00));
-//        this.mainPane.setCenter(simpleMediaPlayer);
-        ArrayList<ChapterInfo> chapterInfos = CommonUtils.getChapterInfo("E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");
-        initChapterBtn(chapterInfos);
 
     }
+
+    public void initChapterInfo(String coursePath){
+        ArrayList<ChapterInfo> chapterInfos = CommonUtils.getChapterInfo(coursePath);
+        initChapterBtn(chapterInfos);
+    }
+
     void initChapterBtn(ArrayList<ChapterInfo> chapterInfos){
         this.chapterBox.getChildren().clear();
         ToggleGroup group = new ToggleGroup();

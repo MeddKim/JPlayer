@@ -63,6 +63,7 @@ public class CommonUtils {
                                 courseBaseInfo.setBgUrl( BG_PREX + courseDir.getAbsolutePath() + File.separator +BG_NAME);
                                 courseBaseInfo.setCourseId(courseNames[0]);
                                 courseBaseInfo.setCourseName(courseNames[1]);
+                                courseBaseInfo.setCoursePath(courseDir.getAbsolutePath());
                                 courseBaseInfos.add(courseBaseInfo);
                             }
                         }
@@ -116,7 +117,6 @@ public class CommonUtils {
         }
         return chapterInfos;
     }
-
 
 
     public static void main(String[] args) {

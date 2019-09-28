@@ -10,5 +10,6 @@ import lombok.Data;
 public class CourseBaseInfo {
     private String courseId;
     private String courseName;
+    private String coursePath;
     private String bgUrl;
 }

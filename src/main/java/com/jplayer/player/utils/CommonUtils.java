@@ -1,11 +1,12 @@
 package com.jplayer.player.utils;
 
-import com.jplayer.player.domain.CourseBaseInfo;
-import com.jplayer.player.domain.ModuleInfo;
-import com.jplayer.player.domain.ThemeInfo;
+import com.jplayer.player.domain.*;
+import com.jplayer.player.enums.ChapterBtnEnum;
+import com.jplayer.player.enums.FileType;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Willard
@@ -74,10 +75,50 @@ public class CommonUtils {
     }
 
 
+    public static ArrayList<ChapterInfo> getChapterInfo(String path){
+        ArrayList<ChapterInfo> chapterInfos = new ArrayList<>();
+        File root = new File(path);
+        for(File chapterDir: root.listFiles()){
+            if(chapterDir.isDirectory()){
+                String[] chapterNames = chapterDir.getName().split(ID_NAME_SPLIT);
+                if(chapterNames.length == 2){
+                    ChapterInfo chapterInfo = new ChapterInfo();
+                    chapterInfo.setChapterId(chapterNames[0]);
+                    chapterInfo.setChapterName(chapterNames[1]);
+                    chapterInfo.setChapterPath(chapterDir.getAbsolutePath());
+                    chapterInfo.setChapterType(ChapterBtnEnum.getTypeFromDir(chapterNames[1]));
+                    List<ChapterFile> chapterFiles = new ArrayList<>();
+                    for(File fileDir : chapterDir.listFiles()){
+                        if(fileDir.isDirectory()){
+                            String[] chapterFileNames = fileDir.getName().split(ID_NAME_SPLIT);
+                            if(chapterFileNames.length == 2){
+                                ChapterFile chapterFile = new ChapterFile();
+                                chapterFile.setFileId(chapterFileNames[0]);
+                                chapterFile.setFileName(chapterFileNames[1]);
+                                chapterFile.setThumbUrl(fileDir.getAbsolutePath() + File.separator +"thumb.jpg");
+                                if(chapterFileNames[1].contains("视频")){
+                                    chapterFile.setType(FileType.VEDIO);
+                                    chapterFile.setPlayUrl(fileDir.getAbsolutePath() + File.separator + "play.mp4");
+                                }else {
+                                    chapterFile.setType(FileType.IMG);
+                                    chapterFile.setPlayUrl(fileDir.getAbsolutePath() + File.separator +"play.jpg");
+                                }
+                                chapterFiles.add(chapterFile);
+                            }
+                        }
+                    }
+                    chapterInfo.setChapterFiles(chapterFiles);
+                    chapterInfos.add(chapterInfo);
+                }
+            }
+        }
+        return chapterInfos;
+    }
+
 
 
     public static void main(String[] args) {
-        ArrayList<ThemeInfo> themeInfos = getThemeInfo("C:\\hk\\course\\0.FS未来素养课程");
-        System.out.println(themeInfos.size());
+        ArrayList<ChapterInfo> chapterInfos = getChapterInfo("E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");
+        System.out.println(chapterInfos.size());
     }
 }

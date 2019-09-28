@@ -40,7 +40,7 @@ public class CourseSelectController {
     }
 
     public void initialize() {
-        ArrayList<ThemeInfo> themeInfos = CommonUtils.getThemeInfo("C:\\hk\\course\\0.FS未来素养课程");
+        ArrayList<ThemeInfo> themeInfos = CommonUtils.getThemeInfo("E:\\course\\0.FS未来素养课程");
         initThemeBox(themeInfos);
         addCourseBox(themeInfos.get(defaultTheme));
     }

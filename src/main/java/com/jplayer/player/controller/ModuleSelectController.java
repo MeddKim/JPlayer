@@ -18,7 +18,7 @@ public class ModuleSelectController {
     private HBox moduleBox;
 
     public void initialize(){
-        ArrayList<ModuleInfo> moduleInfos = CommonUtils.getModuleInfo("C:\\hk\\course");
+        ArrayList<ModuleInfo> moduleInfos = CommonUtils.getModuleInfo("E:\\course");
         for (ModuleInfo moduleInfo: moduleInfos){
             ImageView imageView = createModuleBtn(moduleInfo);
             this.moduleBox.getChildren().add(imageView);

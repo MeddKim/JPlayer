@@ -3,12 +3,12 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
-<BorderPane  fx:id="mainPane" stylesheets="/styles/course-main.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jplayer.player.controller.CourseMainController">
+<BorderPane  fx:id="mainPane" stylesheets="/styles/course-main.css" styleClass="main-pane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jplayer.player.controller.CourseMainController">
     <top>
         <Button mnemonicParsing="false" styleClass="home_btn" BorderPane.alignment="CENTER_RIGHT" />
     </top>
     <left>
-        <VBox alignment="CENTER" styleClass="module-box" fx:id="chapterBox" spacing="30">
+        <VBox alignment="TOP_LEFT" styleClass="chapter-box" fx:id="chapterBox" spacing="50">
         </VBox>
     </left>
     <center>

@@ -1,3 +1,47 @@
 .main-pane{
     -fx-background-image: url("../images/global_bg.png");
 }
+
+.chapter-box{
+    /*-fx-padding: -25,20,0,20;*/
+    -fx-start-margin: 100,100,100,100;
+}
+
+.chapter-box .toggle-button{
+    -fx-min-width: 237;
+    -fx-min-height: 90;
+
+    -fx-background-color: rgba(23,200,230,0);
+    -fx-background-insets: 0;
+}
+
+.chapter-box .toggle-button:selected{
+    -fx-min-width: 287;
+    -fx-min-height: 105;
+    -fx-background-color: rgba(23,200,230,0);
+    -fx-background-insets: 0;
+}
+
+.chapter-box .import-btn{
+    -fx-background-image: url("../images/course/import.png");
+}
+
+.chapter-box .import-btn:selected{
+    -fx-background-image: url("../images/course/import_selected.png");
+}
+
+.chapter-box .teach-btn{
+    -fx-background-image: url("../images/course/teach.png");
+}
+
+.chapter-box .teach-btn:selected{
+    -fx-background-image: url("../images/course/teach_selected.png");
+}
+
+ .chapter-box .arouse-btn{
+     -fx-background-image: url("../images/course/arouse.png");
+ }
+
+.chapter-box .arouse-btn:selected{
+    -fx-background-image: url("../images/course/arouse_selected.png");
+}

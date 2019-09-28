@@ -33,7 +33,11 @@ public class ModuleSelectController {
     public static CourseSelectController con;
 
     public void initialize(){
-        ArrayList<ModuleInfo> moduleInfos = CommonUtils.getModuleInfo("E:\\course");
+
+    }
+
+    public void initModuleInfo(String path){
+        ArrayList<ModuleInfo> moduleInfos = CommonUtils.getModuleInfo(path);
         for (ModuleInfo moduleInfo: moduleInfos){
             Button imageView = createModuleBtn(moduleInfo);
             this.moduleBox.getChildren().add(imageView);

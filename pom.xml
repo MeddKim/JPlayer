@@ -64,6 +64,7 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -71,7 +72,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.8.3</version>
                 <configuration>
-                    <mainClass>com.jplayer.Main</mainClass>
+                    <mainClass>com.jplayer.MainLauncher</mainClass>
                     <vendor>Spartajet</vendor>
                 </configuration>
             </plugin>

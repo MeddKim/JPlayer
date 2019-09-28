@@ -4,13 +4,16 @@ package com.jplayer.player.component.simple;
  * @author Willard
  * @date 2019/9/26
  */
+import com.jplayer.MainLauncher;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
@@ -33,6 +36,7 @@ import java.io.IOException;
  *          包含VP6视频和MP3音频的FLV；
  *          使用H.264/AVC视频压缩的MPEG-4（MP4）
  */
+@Slf4j
 public class SimpleMediaPlayer extends AnchorPane {
 
 //TODO 修改player.fxml 使其为自适应的大小，使用AnchorBar或者修改底部工具栏高度
@@ -50,14 +54,16 @@ public class SimpleMediaPlayer extends AnchorPane {
     //构造函数私有，实例保存在静态域，只向外部提供静态调用
     private SimpleMediaPlayer(String mediaUrl){
         try {
-            FXMLLoader fxmlloader = new FXMLLoader(getClass().getResource("/views/simple/SimplePlayer.fxml"));
-            Parent root = fxmlloader.load();   //将fxml节点添加到根节点中
-            controller = fxmlloader.getController();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/simple/SimplePlayer.fxml"));
+            Parent root = fxmlLoader.load();   //将fxml节点添加到根节点中
+            this.controller = fxmlLoader.getController();
             this.getChildren().add(root);   //主类节点加入根节点
 
+            System.out.println(" 初始化后,controller的值:" + this.controller);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info("初始化controller异常：{}",e);
+//            e.printStackTrace();
         }
 
     }
@@ -77,13 +83,14 @@ public class SimpleMediaPlayer extends AnchorPane {
     }
     public static SimpleMediaPlayer newInstance(String mediaUrl,int width,int height){
         simpleMediaPlayer = new SimpleMediaPlayer(mediaUrl);
+        log.info("play mediaUrl: {}",mediaUrl);
         simpleMediaPlayer.getController().start(mediaUrl,false,width,height);   //非窗口化启动播放器控件
         return simpleMediaPlayer;
     }
 
     //弹窗式调用：默认大小800*600
     public static SimpleMediaPlayer popup(String mediaUrl){
-        return popup(mediaUrl,800,600);
+        return popup(mediaUrl, (int) MainLauncher.screenWidth,(int)MainLauncher.screenHeight);
     }
     public static SimpleMediaPlayer  popup(String mediaUrl,int width,int height){
         simpleMediaPlayer = new SimpleMediaPlayer(mediaUrl);

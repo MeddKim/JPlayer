@@ -442,6 +442,9 @@ public class PlayerController {
 
     //设置关闭窗口时的动作，手动释放资源，回收内存
     public void destroy(){
+        if(mediaPlayer == null){
+            return;
+        }
         if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
             mediaPlayer.stop();
         }

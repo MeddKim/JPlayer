@@ -30,6 +30,7 @@ public class MainLauncher extends Application {
         primaryStage.setMaximized(true);
         //取消所有默认设置（最大最小化，logo image等等）
         primaryStage.initStyle(StageStyle.UNDECORATED);
+
         //设置任务栏logo
         primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResource("images/plug.png").toString()));
         primaryStage.setScene(mainScene);

@@ -20,6 +20,7 @@ public class CommonUtils {
     public static final String ID_NAME_SPLIT = "\\.";
 
     public static final String BG_PREX = "file:";
+    public static final String VIDEO_PREX = "file:/";
     public static final String BG_NAME = "bg.png";
 
     public static ArrayList<ModuleInfo> getModuleInfo(String path){
@@ -95,13 +96,14 @@ public class CommonUtils {
                                 ChapterFile chapterFile = new ChapterFile();
                                 chapterFile.setFileId(chapterFileNames[0]);
                                 chapterFile.setFileName(chapterFileNames[1]);
-                                chapterFile.setThumbUrl(fileDir.getAbsolutePath() + File.separator +"thumb.jpg");
                                 if(chapterFileNames[1].contains("视频")){
                                     chapterFile.setType(FileType.VEDIO);
-                                    chapterFile.setPlayUrl(fileDir.getAbsolutePath() + File.separator + "play.mp4");
+                                    chapterFile.setPlayUrl(VIDEO_PREX + fileDir.getAbsolutePath() + File.separator + "play.mp4");
+                                    chapterFile.setThumbUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator +"thumb.png");
                                 }else {
                                     chapterFile.setType(FileType.IMG);
-                                    chapterFile.setPlayUrl(fileDir.getAbsolutePath() + File.separator +"play.jpg");
+                                    chapterFile.setPlayUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "voice_play_bg.jpg");
+                                    chapterFile.setThumbUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "voice_img.jpg");
                                 }
                                 chapterFiles.add(chapterFile);
                             }

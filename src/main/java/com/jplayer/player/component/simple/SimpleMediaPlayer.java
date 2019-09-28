@@ -107,7 +107,9 @@ public class SimpleMediaPlayer extends AnchorPane {
     }
 
 
-
+    public void stop(){
+        simpleMediaPlayer.getController().destroy();
+    }
 
 
 

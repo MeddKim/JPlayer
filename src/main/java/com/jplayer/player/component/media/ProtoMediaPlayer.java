@@ -1,24 +1,22 @@
 package com.jplayer.player.component.media;
 
-import javafx.animation.FadeTransitionBuilder;
-import javafx.animation.Interpolator;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ParallelTransitionBuilder;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 /**
@@ -26,359 +24,396 @@ import javafx.util.Duration;
  * @date 2019/9/26
  */
 public class ProtoMediaPlayer extends BorderPane {
-    private MediaPlayer mp;
+
+    /**
+     * 控制按钮box
+     */
+    private HBox controlBox;
+    private Button playBtn;
+    private Button maxBtn;
+    private Button volumeBtn;
+    private Label timeLb;
+    private Slider processSd;
+    private Slider volumeSd;
+
+    private double width;
+    private double height;
+
+    /**
+     * 内容区域整体padding
+     */
+    private double globalPadding = 5;
+
+    /**
+     * Button默认的padding 上下5，左右10
+     */
+    private double defaultBtnHPadding = 5;
+    private double defaultBtnWPadding = 10;
+
+    private double boxSpace = 5;
+
+    private double defaultBtnSize = 24;
+
+    /**
+     * 资源按钮ICON位置
+     */
+    private String playIconPath = getClass().getResource("/images/media/play_btn.png").toString();
+    private String stopIconPath = getClass().getResource("/images/media/stop_btn.png").toString();
+    private String voiceIconPath = getClass().getResource("/images/media/voice_btn.png").toString();
+    private String muteIconPath = getClass().getResource("/images/media/mute_btn.png").toString();
+    private String maxIconPath = getClass().getResource("/images/media/max_btn.png").toString();
+
+
+
+
+    /**
+     * 播放相关信息
+     */
+    private String url;
     private MediaView mediaView;
+    private MediaPlayer mediaPlayer;
+    private Media media;
+    /**
+     * 窗口弹出方式
+     */
+    private boolean popup;
+
+    /**
+     * 记录视频是否重复播放
+     */
     private final boolean repeat = false;
-    private boolean stopRequested = false;
+    /**
+     * 储存静音操作前的音量数据
+     */
+    private double volumeValue;
+    /**
+     * 记录视频持续时间
+     */
+    private Duration duration ;
+
+    /**
+     * 记录视频是否处播放到结束
+     */
     private boolean atEndOfMedia = false;
-    private Duration duration;
-    private Slider timeSlider;
-    private Label playTime;
-    private Slider volumeSlider;
-    private HBox mediaTopBar;
-    private HBox mediaBottomBar;
-    private ParallelTransition transition = null;
 
-    @Override
-    protected void layoutChildren() {
-        if (mediaView != null && getBottom() != null) {
-            mediaView.setFitWidth(getWidth());
-            mediaView.setFitHeight(getHeight() - getBottom().prefHeight(-1));
-        }
-        super.layoutChildren();
-        if (mediaView != null) {
-            mediaView.setTranslateX((((Pane) getCenter()).getWidth() - mediaView.prefWidth(-1)) / 2);
-            mediaView.setTranslateY((((Pane) getCenter()).getHeight() - mediaView.prefHeight(-1)) / 2);
-        }
+    private Scene scene;
+
+    /**
+     * @param width 视频宽
+     * @param height 视频高
+     */
+    public ProtoMediaPlayer(double width,double height){
+        this.width = width;
+        this.height = height;
+        this.setMaxWidth(calPaneWidth(width));
+        this.setMaxHeight(calPaneHeight(height));
+        this.getStylesheets().add(getClass().getResource("/styles/proto_media.css").toString());
+        this.getStyleClass().add("main-pane");
+
+        initComponent();
+
+        //播放按钮
+        setPlayButton();
+        setProcessSlider();
+        setVolumeButton();
+        setVolumeSd();
+
+    }
+    double calPaneHeight(double height){
+        double mainHeight = height + this.defaultBtnSize + this.globalPadding * 2 + this.defaultBtnHPadding * 2;
+        return mainHeight;
+    }
+    double calPaneWidth(double width){
+        double mainWidth = width + this.globalPadding * 2;
+        return mainWidth;
     }
 
-    @Override
-    protected double computeMinWidth(double height) {
-        return mediaBottomBar.prefWidth(-1);
+    /**
+     * 初始化各个组件 并且计算布局
+     */
+    private void initComponent(){
+        this.initControlBox();
+        this.initMediaView();
     }
 
-    @Override
-    protected double computeMinHeight(double width) {
-        return 200;
+    private void initControlBox(){
+        this.controlBox = new HBox();
+        this.controlBox.getStyleClass().add("control-box");
+        /**
+         * 部分主键宽度需要计算 playBtn、volumeBtn、maxBtn已经确认为  44 * 34(width * height)
+         */
+        double btnWidth = this.defaultBtnSize + this.defaultBtnWPadding * 2;
+        double btnWidthSum = btnWidth * 3;
+        // box中除掉button剩余的宽度 = 总宽度（this.width - globalPadding * 2 ）- 按钮总宽度 - 间距
+        double restWidth = this.width + this.globalPadding * 2 - btnWidthSum - this.boxSpace * 5;
+        // 计算其他部分的宽度 proccessSlider : timeLabel : 2 : 2 : 6
+        double processSliderWidth = restWidth * 0.6;
+        double timeLabelWidth = restWidth * 0.2;
+        double voiceSliderWidth = restWidth * 0.2;
+
+
+
+        this.playBtn = new Button();
+        setIcon(this.playBtn,this.playIconPath,defaultBtnSize);
+        this.volumeBtn = new Button();
+        setIcon(this.volumeBtn,this.voiceIconPath,defaultBtnSize);
+        this.maxBtn = new Button();
+        setIcon(this.maxBtn,this.maxIconPath,defaultBtnSize);
+
+        this.processSd = new Slider();
+        this.processSd.setMaxWidth(processSliderWidth);
+        this.processSd.setMinWidth(processSliderWidth);
+
+        this.timeLb = new Label("10:30/167:34");
+        this.timeLb.setMaxWidth(timeLabelWidth);
+        this.timeLb.setMinWidth(timeLabelWidth);
+
+        this.volumeSd = new Slider();
+        this.volumeSd.setMaxWidth(voiceSliderWidth);
+        this.volumeSd.setMinWidth(voiceSliderWidth);
+        this.controlBox.getChildren().addAll(this.playBtn,this.processSd,this.timeLb,this.volumeBtn,this.volumeSd,this.maxBtn);
+        this.controlBox.setAlignment(Pos.CENTER);
+
+        this.setBottom(this.controlBox);
     }
 
-    @Override
-    protected double computePrefWidth(double height) {
-        return Math.max(mp.getMedia().getWidth(), mediaBottomBar.prefWidth(height));
+    private void initMediaView(){
+        this.mediaView = new MediaView();
+        this.mediaView.setFitHeight(this.height);
+        this.mediaView.setFitWidth(this.width);
+        this.setCenter(this.mediaView);
     }
 
-    @Override
-    protected double computePrefHeight(double width) {
-        return mp.getMedia().getHeight() + mediaBottomBar.prefHeight(width);
+
+    private void printLayout(){
+        System.out.println("整体高度：" + this.getHeight());
+
+        System.out.println("box高度：" + this.controlBox.getHeight());
+        System.out.println("图片高度：" + ((ImageView)this.maxBtn.getGraphic()).getFitHeight());
+        System.out.println("按钮高度：" + this.maxBtn.getHeight());
+
+        System.out.println("--------------------------------------------");
+        System.out.println("整体宽度" + this.getWidth());
+        System.out.println("box宽度：" + this.controlBox.getWidth());
+        System.out.println("图片宽度：" + ((ImageView)this.maxBtn.getGraphic()).getFitWidth());
+        System.out.println("按钮宽度：" + this.maxBtn.getWidth());
     }
 
-    @Override
-    protected double computeMaxWidth(double height) {
-        return Double.MAX_VALUE;
+
+    public void start(String url,Boolean popup){
+        this.url = url;
+        this.popup = popup;
+
+        //MediaView设置
+        this.media = new Media(url);
+        this.mediaPlayer = new MediaPlayer(media);
+        this.mediaView.setMediaPlayer(mediaPlayer);
+
+        //设置播放器，在媒体资源加载完毕后，获取相应的数据，设置组件自适应布局
+        setMediaPlayer(this.width,this.height);
     }
 
-    @Override
-    protected double computeMaxHeight(double width) {
-        return Double.MAX_VALUE;
-    }
-
-    public ProtoMediaPlayer(final MediaPlayer mp) {
-        this.mp = mp;
-        setId("player-pane");
-
-        mediaView = new MediaView(mp);
-        Pane mvPane = new Pane() {
-        };
-        mvPane.setId("media-pane");
-        mvPane.getChildren().add(mediaView);
-        setCenter(mvPane);
-
-        mediaTopBar = HBoxBuilder.create()
-                .padding(new Insets(5, 10, 5, 10))
-                .alignment(Pos.CENTER)
-                .opacity(0)
-                .build();
-        BorderPane.setAlignment(mediaTopBar, Pos.CENTER);
-
-        mediaBottomBar = HBoxBuilder.create()
-                .padding(new Insets(5, 10, 5, 10))
-                .alignment(Pos.CENTER)
-                .opacity(0)
-                .build();
-        BorderPane.setAlignment(mediaBottomBar, Pos.CENTER);
-
-        setOnMouseEntered(new EventHandler<MouseEvent>() {
+    /**
+     * 设置mediaPlayer(参数：整个播放器的尺寸)
+     * @param width
+     * @param height
+     */
+    void setMediaPlayer(double width,double height){
+        mediaPlayer.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
+        //视频就绪时更新 进度条 、时间标签、音量条数据,设置布局尺寸
+        mediaPlayer.setOnReady(new Runnable(){
             @Override
-            public void handle(MouseEvent t) {
-                if (transition != null){
-                    transition.stop();
-                }
-                transition = ParallelTransitionBuilder.create()
-                        .children(
-                                FadeTransitionBuilder.create()
-                                        .node(mediaTopBar)
-                                        .toValue(1)
-                                        .duration(Duration.millis(200))
-                                        .interpolator(Interpolator.EASE_OUT)
-                                        .build(),
-                                FadeTransitionBuilder.create()
-                                        .node(mediaBottomBar)
-                                        .toValue(1)
-                                        .duration(Duration.millis(200))
-                                        .interpolator(Interpolator.EASE_OUT)
-                                        .build()
-                        )
-                        .build();
-                transition.play();
+            public void run() {
+                System.out.println("播放准备好");
+                duration = mediaPlayer.getMedia().getDuration();
+                volumeValue = mediaPlayer.getVolume();
+                mediaView.setFitWidth(width);
+                mediaView.setFitHeight(height);
+                updateValues();
             }
         });
-        setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-                if (transition != null) {
-                    transition.stop();
-                }
-                transition = ParallelTransitionBuilder.create()
-                        .children(
-                                FadeTransitionBuilder.create()
-                                        .node(mediaTopBar)
-                                        .toValue(0)
-                                        .duration(Duration.millis(800))
-                                        .interpolator(Interpolator.EASE_OUT)
-                                        .build(),
-                                FadeTransitionBuilder.create()
-                                        .node(mediaBottomBar)
-                                        .toValue(0)
-                                        .duration(Duration.millis(800))
-                                        .interpolator(Interpolator.EASE_OUT)
-                                        .build()
-                        )
-                        .build();
-                transition.play();
-            }
-        });
-
-        mp.currentTimeProperty().addListener(new ChangeListener<Duration>() {
+        //mediaPlayer当前进度发生改变时候，进度条 、时间标签、音量条数据
+        mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>(){
             @Override
             public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
                 updateValues();
             }
         });
-        mp.setOnPlaying(new Runnable() {
-            @Override
-            public void run() {
-                if (stopRequested) {
-                    mp.pause();
-                    stopRequested = false;
-                }
-            }
-        });
-        mp.setOnReady(new Runnable() {
-            @Override
-            public void run() {
-                duration = mp.getMedia().getDuration();
-                updateValues();
-            }
-        });
-        mp.setOnEndOfMedia(new Runnable() {
-            @Override
-            public void run() {
-                if (!repeat) {
-                    stopRequested = true;
-                    atEndOfMedia = true;
-                }
-            }
-        });
-        mp.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
-
-        // Time label
-        Label timeLabel = LabelBuilder.create()
-                .text("Time")
-                .minWidth(Control.USE_PREF_SIZE)
-                .textFill(Color.WHITE)
-                .build();
-        mediaTopBar.getChildren().add(timeLabel);
-
-        // Time slider
-        timeSlider = SliderBuilder.create()
-                .id("media-slider")
-                .minWidth(240)
-                .maxWidth(Double.MAX_VALUE)
-                .build();
-        timeSlider.valueProperty().addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable ov) {
-                if (timeSlider.isValueChanging()) {
-                    // multiply duration by percentage calculated by slider position
-                    if (duration != null) {
-                        mp.seek(duration.multiply(timeSlider.getValue() / 100.0));
-                    }
-                    updateValues();
-
-                }
-            }
-        });
-        HBox.setHgrow(timeSlider, Priority.ALWAYS);
-        mediaTopBar.getChildren().add(timeSlider);
-
-        // Play label
-        playTime = LabelBuilder.create()
-                .prefWidth(130)
-                .minWidth(50)
-                .textFill(Color.WHITE)
-                .build();
-        mediaTopBar.getChildren().add(playTime);
-
-        // Volume label
-        Label volumeLabel = LabelBuilder.create()
-                .text("Vol")
-                .textFill(Color.WHITE)
-                .minWidth(Control.USE_PREF_SIZE)
-                .build();
-        mediaTopBar.getChildren().add(volumeLabel);
-
-        // Volume slider
-        volumeSlider = SliderBuilder.create()
-                .id("media-slider")
-                .prefWidth(120)
-                .maxWidth(Region.USE_PREF_SIZE)
-                .minWidth(30)
-                .build();
-        volumeSlider.valueProperty().addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable ov) {
-            }
-        });
-        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (volumeSlider.isValueChanging()) {
-                    mp.setVolume(volumeSlider.getValue() / 100.0);
-                }
-            }
-        });
-        mediaTopBar.getChildren().add(volumeSlider);
-
-        setTop(mediaTopBar);
-
-        final EventHandler<ActionEvent> backAction = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                mp.seek(Duration.ZERO);
-            }
-        };
-        final EventHandler<ActionEvent> stopAction = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                mp.stop();
-            }
-        };
-        final EventHandler<ActionEvent> playAction = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                mp.play();
-            }
-        };
-        final EventHandler<ActionEvent> pauseAction = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                mp.pause();
-            }
-        };
-        final EventHandler<ActionEvent> forwardAction = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                Duration currentTime = mp.getCurrentTime();
-                mp.seek(Duration.seconds(currentTime.toSeconds() + 5.0));
-            }
-        };
-
-        mediaBottomBar = HBoxBuilder.create()
-                .id("bottom")
-                .spacing(0)
-                .alignment(Pos.CENTER)
-                .children(
-                        ButtonBuilder.create()
-                                .id("back-button")
-                                .text("Back")
-                                .onAction(backAction)
-                                .build(),
-                        ButtonBuilder.create()
-                                .id("stop-button")
-                                .text("Stop")
-                                .onAction(stopAction)
-                                .build(),
-                        ButtonBuilder.create()
-                                .id("play-button")
-                                .text("Play")
-                                .onAction(playAction)
-                                .build(),
-                        ButtonBuilder.create()
-                                .id("pause-button")
-                                .text("Pause")
-                                .onAction(pauseAction)
-                                .build(),
-                        ButtonBuilder.create()
-                                .id("forward-button")
-                                .text("Forward")
-                                .onAction(forwardAction)
-                                .build()
-                )
-                .build();
-
-        setBottom(mediaBottomBar);
     }
 
-    protected void updateValues() {
-        if (playTime != null && timeSlider != null && volumeSlider != null && duration != null) {
-            Platform.runLater(new Runnable() {
+    /**
+     * 更新视频数据（进度条 、时间标签、音量条数据）
+     */
+    protected void updateValues(){
+        if(processSd != null && timeLb!=null && volumeSd != null && volumeBtn != null){
+            Platform.runLater(new Runnable(){
+                @Override
                 public void run() {
-                    Duration currentTime = mp.getCurrentTime();
-                    playTime.setText(formatTime(currentTime, duration));
-                    timeSlider.setDisable(duration.isUnknown());
-                    if (!timeSlider.isDisabled() && duration.greaterThan(Duration.ZERO) && !timeSlider.isValueChanging()) {
-                        timeSlider.setValue(currentTime.divide(duration).toMillis() * 100.0);
+                    Duration currentTime = mediaPlayer.getCurrentTime();
+                    //设置时间标签
+                    timeLb.setText(formatTime(currentTime,duration));
+                    //无法读取时间是隐藏进度条
+                    processSd.setDisable(duration.isUnknown());
+                    if(!processSd.isDisabled() && duration.greaterThan(Duration.ZERO) && !processSd.isValueChanging()){
+                        //设置进度条
+                        processSd.setValue(currentTime.toMillis()/duration.toMillis() * 100);
                     }
-                    if (!volumeSlider.isValueChanging()) {
-                        volumeSlider.setValue((int) Math.round(mp.getVolume() * 100));
+                    if(!volumeSd.isValueChanging()){
+                        //设置音量条
+                        volumeSd.setValue((int)Math.round(mediaPlayer.getVolume() *100));
+                        //设置音量按钮
+                        if(mediaPlayer.getVolume() == 0){
+                            setIcon(volumeBtn,muteIconPath,20);
+                        }else{
+                            setIcon(volumeBtn,voiceIconPath,20);
+                        }
                     }
                 }
             });
         }
     }
-    private static String formatTime(Duration elapsed, Duration duration) {
+
+    //将Duration数据格式化，用于播放时间标签
+    protected String formatTime(Duration elapsed,Duration duration){
+        //将两个Duartion参数转化为 hh：mm：ss的形式后输出
         int intElapsed = (int)Math.floor(elapsed.toSeconds());
         int elapsedHours = intElapsed / (60 * 60);
-        if (elapsedHours > 0) {
-            intElapsed -= elapsedHours * 60 * 60;
-        }
-        int elapsedMinutes = intElapsed / 60;
+        int elapsedMinutes = (intElapsed - elapsedHours *60 *60)/ 60;
         int elapsedSeconds = intElapsed - elapsedHours * 60 * 60 - elapsedMinutes * 60;
-
-        if (duration.greaterThan(Duration.ZERO)) {
+        if(duration.greaterThan(Duration.ZERO)){
             int intDuration = (int)Math.floor(duration.toSeconds());
             int durationHours = intDuration / (60 * 60);
-            if (durationHours > 0) {
-                intDuration -= durationHours * 60 * 60;
-            }
-            int durationMinutes = intDuration / 60;
+            int durationMinutes = (intDuration - durationHours *60 * 60) / 60;
             int durationSeconds = intDuration - durationHours * 60 * 60 - durationMinutes * 60;
 
-            if (durationHours > 0) {
-                return String.format("%d:%02d:%02d",
-                        elapsedHours, elapsedMinutes, elapsedSeconds);
-            } else {
-                return String.format("%02d:%02d",
-                        elapsedMinutes, elapsedSeconds);
+            if(durationHours > 0){
+                return String.format("%02d:%02d:%02d / %02d:%02d:%02d",elapsedHours,elapsedMinutes,elapsedSeconds,durationHours,durationMinutes,durationSeconds);
+            }else{
+                return String.format("%02d:%02d / %02d:%02d",elapsedMinutes,elapsedSeconds,durationMinutes,durationSeconds);
             }
-        } else {
-            if (elapsedHours > 0) {
-                return String.format("%d:%02d:%02d",
-                        elapsedHours, elapsedMinutes, elapsedSeconds);
-            } else {
-                return String.format("%02d:%02d",
-                        elapsedMinutes, elapsedSeconds);
+        }else{
+            if(elapsedHours > 0){
+                return String.format("%02d:%02d:%02d / %02d:%02d:%02d",elapsedHours,elapsedMinutes,elapsedSeconds);
+            }else{
+                return String.format("%02d:%02d / %02d:%02d",elapsedMinutes,elapsedSeconds);
             }
         }
+    }
+
+
+    //设置关闭窗口时的动作，手动释放资源，回收内存
+    public void destroy(){
+        if(mediaPlayer == null){
+            return;
+        }
+        if(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING){
+            mediaPlayer.stop();
+        }
+        mediaPlayer.dispose();   //释放meidaPlayer的Media资源
+        media = null;
+        mediaPlayer = null;
+        System.gc();    //通知JVM垃圾回收器
+
+    }
+
+    //设置播放按钮动作
+    private void setPlayButton(){
+        this.playBtn.setOnAction((ActionEvent e)->{
+            if(media == null){
+                return;
+            }
+            MediaPlayer.Status status = mediaPlayer.getStatus();
+            if(status == MediaPlayer.Status.UNKNOWN || status == MediaPlayer.Status.HALTED ){
+                return;
+            }
+            /**
+             * 当资源处于暂停或停止状态时
+             */
+            if(status == MediaPlayer.Status.PAUSED || status == MediaPlayer.Status.READY || status == MediaPlayer.Status.STOPPED){
+                //当资源播放结束时，重绕资源
+                if(atEndOfMedia){
+                    mediaPlayer.seek(mediaPlayer.getStartTime());
+                    atEndOfMedia = false;
+                }
+                mediaPlayer.play();
+                setIcon(this.playBtn,stopIconPath,this.defaultBtnSize);
+            }else{   //当资源处于播放状态时
+                mediaPlayer.pause();
+                setIcon(this.playBtn,playIconPath,25);
+            }
+        });
+    }
+
+    /**
+     * 为按钮获取图标
+     * @param button
+     * @param path
+     * @param size
+     * @description button有一个默认的padding = 上下5 左右10  放入一个 24 * 24的ImageView后
+     *       button成了height * width = 34 * 44
+     */
+    private void setIcon(Button button,String path,double size){
+        Image icon = new Image(path);
+        ImageView imageView = new ImageView(icon);
+        imageView.setFitWidth(size);
+        imageView.setFitHeight(size);
+        button.setGraphic(imageView);
+
+        //设置图标点击时发亮
+        ColorAdjust colorAdjust = new ColorAdjust();
+        button.setOnMousePressed(event ->  {
+            colorAdjust.setBrightness(0.5);
+            button.setEffect(colorAdjust);
+        });
+        button.setOnMouseReleased(event -> {
+            colorAdjust.setBrightness(0);
+            button.setEffect(colorAdjust);
+        });
+    }
+
+    /**
+     * 设置视频进度条动作
+     */
+    private void setProcessSlider(){
+        this.processSd.valueProperty().addListener(new ChangeListener<Number>(){
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                /**
+                 * 加入Slider正在改变的判定，否则由于update线程的存在，mediaPlayer会不停地回绕
+                 */
+                if(processSd.isValueChanging()){
+                    mediaPlayer.seek(duration.multiply(processSd.getValue()/100.0));
+                }
+            }
+        });
+    }
+
+    private void setVolumeButton(){
+        this.volumeBtn.setOnAction((ActionEvent e)->{
+            if(media == null){
+                return;
+            }
+            if(mediaPlayer.getVolume()>0){
+                volumeValue = mediaPlayer.getVolume();
+                volumeSd.setValue(0);
+                setIcon(volumeBtn,muteIconPath,25);
+            }else{
+                mediaPlayer.setVolume(volumeValue);
+                volumeSd.setValue(volumeValue * 100);
+                setIcon(volumeBtn,voiceIconPath,15);
+            }
+        });
+    }
+
+    /**
+     * 设置音量滑条动作
+     */
+    private void setVolumeSd(){
+        volumeSd.valueProperty().addListener(new ChangeListener<Number>(){
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                mediaPlayer.setVolume(newValue.doubleValue()/100);
+            }
+        });
     }
 }

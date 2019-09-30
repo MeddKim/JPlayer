@@ -1,0 +1,22 @@
+.main-pane{
+    -fx-background-color: #FFFFFF;
+}
+
+.control-box{
+    -fx-background-color: #F2F2F2;
+}
+
+.button{
+    -fx-background-color: rgba(23,200,230,0);
+    -fx-background-insets: 0;
+}
+
+
+
+#color-slider .track{
+    -fx-background-color: transparent;
+}
+
+#color-slider .thumb{
+    -fx-background-color: #FFF0FF;
+}

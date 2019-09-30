@@ -1,16 +1,12 @@
 package com.jplayer.player.controller;
 
-import com.jplayer.player.component.simple.SimpleMediaPlayer;
+import com.jplayer.player.component.media.ProtoMediaPlayer;
 import com.jplayer.player.domain.ChapterFile;
 import com.jplayer.player.domain.ChapterInfo;
-import com.jplayer.player.domain.ThemeInfo;
 import com.jplayer.player.utils.CommonUtils;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -42,7 +38,7 @@ public class CourseMainController {
 
     private int defaultChapter = 0;
 
-    private SimpleMediaPlayer simpleMediaPlayer;
+    private ProtoMediaPlayer mediaPlayer;
 
     public void initialize() {
 
@@ -107,8 +103,8 @@ public class CourseMainController {
     }
 
     private void setImageViewToContainer(ChapterFile chapterFile){
-        if(this.simpleMediaPlayer != null){
-            this.simpleMediaPlayer.stop();
+        if(this.mediaPlayer != null){
+            this.mediaPlayer.destroy();
         }
         this.containerBox.getChildren().clear();
         Image image = new Image(chapterFile.getPlayUrl());
@@ -118,21 +114,20 @@ public class CourseMainController {
 
 
     private void setVideoToContainer(ChapterFile chapterFile){
-        if(this.simpleMediaPlayer != null){
-            this.simpleMediaPlayer.stop();
+        if(this.mediaPlayer != null){
+            this.mediaPlayer.destroy();
         }
         this.containerBox.getChildren().clear();
         try {
             URL url = new URL(chapterFile.getPlayUrl());
-            this.simpleMediaPlayer = SimpleMediaPlayer.newInstance(url.toString(),1000,800);
-            this.containerBox.getChildren().add(this.simpleMediaPlayer);
+            this.mediaPlayer = new ProtoMediaPlayer(960,540);
+            this.mediaPlayer.start(url.toString(),false);
+            this.containerBox.getChildren().add(this.mediaPlayer);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
     }
-
-
 
     private ToggleButton createChapterBtn(ChapterInfo chapterInfo){
         ToggleButton button = new ToggleButton();

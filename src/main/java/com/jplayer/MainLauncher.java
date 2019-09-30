@@ -1,6 +1,5 @@
 package com.jplayer;
 
-import com.jplayer.player.controller.CourseMainController;
 import com.jplayer.player.controller.ModuleSelectController;
 import javafx.application.Application;
 import javafx.application.Platform;

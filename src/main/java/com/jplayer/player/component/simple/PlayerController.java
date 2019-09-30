@@ -109,6 +109,7 @@ public class PlayerController {
      * 程序初始化：设置按钮图标
      */
     public void initialize(){
+
         //设置各控件图标
         setIcon(playBT,playIcon,25);
         setIcon(stopBT,stopIcon,25);
@@ -423,6 +424,7 @@ public class PlayerController {
         imageView.setFitWidth(size);
         imageView.setFitHeight((int)(size * icon.getHeight() / icon.getWidth()));
         button.setGraphic(imageView);
+
         //设置图标点击时发亮
         ColorAdjust colorAdjust = new ColorAdjust();
         button.setOnMousePressed(event ->  {
@@ -452,7 +454,6 @@ public class PlayerController {
         media = null;
         mediaPlayer = null;
         System.gc();    //通知JVM垃圾回收器
-
     }
 
 

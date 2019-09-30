@@ -4,13 +4,13 @@ package com.jplayer.player.component.simple;
  * @author Willard
  * @date 2019/9/26
  */
+
 import com.jplayer.MainLauncher;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import lombok.extern.slf4j.Slf4j;

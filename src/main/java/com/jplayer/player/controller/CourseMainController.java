@@ -6,15 +6,16 @@ import com.jplayer.player.domain.ChapterInfo;
 import com.jplayer.player.utils.CommonUtils;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,16 +33,29 @@ public class CourseMainController {
     @FXML
     private HBox fileThumbBox;
     @FXML
-    private HBox containerBox;
+    private BorderPane containerPane;
 
     private Scene scene;
+
+    private StackPane stackPane;
 
     private int defaultChapter = 0;
 
     private ProtoMediaPlayer mediaPlayer;
 
     public void initialize() {
+        DropShadow dropshadow = new DropShadow();// 阴影向外
+        dropshadow.setRadius(10);// 颜色蔓延的距离
+        dropshadow.setOffsetX(0);// 水平方向，0则向左右两侧，正则向右，负则向左
+        dropshadow.setOffsetY(0);// 垂直方向，0则向上下两侧，正则向下，负则向上
+        dropshadow.setSpread(0.1);// 颜色变淡的程度
+        dropshadow.setColor(Color.BLACK);// 设置颜色
+        this.containerPane.setEffect(dropshadow);
+//        this.mainPane.setEffect(dropshadow);
+        this.containerPane.setBackground(Background.EMPTY);
+    }
 
+    private void calLayout(){
     }
 
     public void initChapterInfo(String coursePath){
@@ -75,7 +89,7 @@ public class CourseMainController {
 
     private void setThumbBox(ChapterInfo chapterInfo){
         this.fileThumbBox.getChildren().clear();
-        this.containerBox.getChildren().clear();
+        this.containerPane.setCenter(null);
         for(ChapterFile chapterFile: chapterInfo.getChapterFiles()){
             Image image = new Image(chapterFile.getThumbUrl());
             ImageView imageView = new ImageView(image);
@@ -85,7 +99,7 @@ public class CourseMainController {
             imageView.setOnMouseClicked(e -> {
                 setContainer(chapterFile);
             });
-            this.fileThumbBox.getChildren().add(imageView);
+//            this.fileThumbBox.getChildren().add(imageView);
         }
     }
 
@@ -106,10 +120,10 @@ public class CourseMainController {
         if(this.mediaPlayer != null){
             this.mediaPlayer.destroy();
         }
-        this.containerBox.getChildren().clear();
+        this.containerPane.setCenter(null);
         Image image = new Image(chapterFile.getPlayUrl());
         ImageView imageView = new ImageView(image);
-        this.containerBox.getChildren().add(imageView);
+        this.containerPane.setCenter(imageView);
     }
 
 
@@ -117,12 +131,12 @@ public class CourseMainController {
         if(this.mediaPlayer != null){
             this.mediaPlayer.destroy();
         }
-        this.containerBox.getChildren().clear();
+        this.containerPane.setCenter(null);
         try {
             URL url = new URL(chapterFile.getPlayUrl());
             this.mediaPlayer = new ProtoMediaPlayer(960,540);
             this.mediaPlayer.start(url.toString(),false);
-            this.containerBox.getChildren().add(this.mediaPlayer);
+            this.containerPane.setCenter(this.mediaPlayer);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

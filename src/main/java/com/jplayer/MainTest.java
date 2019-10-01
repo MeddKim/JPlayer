@@ -7,11 +7,18 @@ package com.jplayer;
 
 import com.jplayer.player.component.media.ProtoMediaPlayer;
 import com.jplayer.player.component.simple.SimpleMediaPlayer;
+import com.jplayer.player.controller.CourseMainController;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.net.URL;
 
@@ -22,8 +29,9 @@ public class MainTest extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        my(primaryStage);
+//        my(primaryStage);
 //        other(primaryStage);
+        pane(primaryStage);
     }
 
     public static void my(Stage primaryStage) throws Exception{
@@ -48,6 +56,29 @@ public class MainTest extends Application {
         BorderPane.setAlignment(player,Pos.CENTER);
         primaryStage.setScene(new Scene(player, 1000, 800));
         primaryStage.show();
+    }
+
+    public static void pane(Stage primaryStage) throws Exception{
+
+        FXMLLoader fxmlLoader = new FXMLLoader(MainTest.class.getResource("/views/CourseMain.fxml"));
+        Parent root = (Pane) fxmlLoader.load();
+
+        CourseMainController controller = fxmlLoader.<CourseMainController>getController();
+        controller.initChapterInfo("C:\\dev\\app\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");
+        Scene mainScene = new Scene(root);
+
+        //最大化窗口
+        primaryStage.setMaximized(true);
+        //取消所有默认设置（最大最小化，logo image等等）
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+
+        //设置任务栏logo
+        primaryStage.getIcons().add(new Image(MainTest.class.getClassLoader().getResource("images/plug.png").toString()));
+        primaryStage.setScene(mainScene);
+        primaryStage.show();
+
+
+        primaryStage.setOnCloseRequest(e -> Platform.exit());
     }
 
     public static void main(String[] args) {

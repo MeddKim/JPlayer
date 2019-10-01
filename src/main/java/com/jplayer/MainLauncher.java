@@ -71,4 +71,8 @@ public class MainLauncher extends Application {
         log.info("course path: {}",coursePath);
         moduleSelectCon.initModuleInfo(coursePath);
     }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

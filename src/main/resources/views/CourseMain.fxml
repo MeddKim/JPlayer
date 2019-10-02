@@ -9,13 +9,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
 <BorderPane fx:id="mainPane" stylesheets="/styles/course-main.css" styleClass="main-pane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jplayer.player.controller.CourseMainController">
-    <top>
-        <Button mnemonicParsing="false" styleClass="home_btn" BorderPane.alignment="CENTER_RIGHT" />
-    </top>
-    <left>
-        <VBox alignment="TOP_LEFT" styleClass="chapter-box" fx:id="chapterBox" spacing="50">
-        </VBox>
-    </left>
     <center>
         <BorderPane fx:id="containerPane" styleClass="container-pane">
             <BorderPane.margin>
@@ -28,6 +21,13 @@
             </bottom>
         </BorderPane>
     </center>
+    <top>
+        <Button mnemonicParsing="false" styleClass="home_btn" BorderPane.alignment="CENTER_RIGHT" />
+    </top>
+    <left>
+        <VBox alignment="TOP_LEFT" styleClass="chapter-box" fx:id="chapterBox" spacing="50">
+        </VBox>
+    </left>
     <bottom>
         <HBox alignment="CENTER">
             <Label text="上海艾特格瑞美术" styleClass="footer-label"></Label>

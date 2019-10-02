@@ -35,10 +35,6 @@ public class CourseMainController {
     @FXML
     private BorderPane containerPane;
 
-    private Scene scene;
-
-    private StackPane stackPane;
-
     private int defaultChapter = 0;
 
     private ProtoMediaPlayer mediaPlayer;
@@ -66,6 +62,7 @@ public class CourseMainController {
     void initChapterBtn(ArrayList<ChapterInfo> chapterInfos){
         this.chapterBox.getChildren().clear();
         ToggleGroup group = new ToggleGroup();
+
         for(int i = 0;i < chapterInfos.size();i++){
             ChapterInfo chapterInfo = chapterInfos.get(i);
             ToggleButton button = createChapterBtn(chapterInfo);

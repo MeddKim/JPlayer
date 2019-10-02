@@ -29,9 +29,9 @@ public class MainTest extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        my(primaryStage);
-//        other(primaryStage);
-//        pane(primaryStage);
+//        my(primaryStage);
+        other(primaryStage);
+        pane(primaryStage);
     }
 
     public static void my(Stage primaryStage) throws Exception{
@@ -70,7 +70,7 @@ public class MainTest extends Application {
         //最大化窗口
         primaryStage.setMaximized(true);
         //取消所有默认设置（最大最小化，logo image等等）
-        primaryStage.initStyle(StageStyle.UNDECORATED);
+//        primaryStage.initStyle(StageStyle.UNDECORATED);
 
         //设置任务栏logo
         primaryStage.getIcons().add(new Image(MainTest.class.getClassLoader().getResource("images/plug.png").toString()));

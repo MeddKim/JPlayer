@@ -29,9 +29,9 @@ public class MainTest extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-//        my(primaryStage);
+        my(primaryStage);
 //        other(primaryStage);
-        pane(primaryStage);
+//        pane(primaryStage);
     }
 
     public static void my(Stage primaryStage) throws Exception{
@@ -39,7 +39,7 @@ public class MainTest extends Application {
         primaryStage.setTitle("Test Meida");
         BorderPane mainPane = new BorderPane();
         ProtoMediaPlayer pane = new ProtoMediaPlayer(960,540);
-        URL url = new URL("file:/C:\\dev\\app\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)\\1.导入\\0.导入视频\\play.mp4");
+        URL url = new URL("file:/E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)\\1.导入\\0.导入视频\\play.mp4");
         pane.start(url.toString(),false);
         mainPane.setCenter(pane);
         BorderPane.setAlignment(pane,Pos.CENTER);
@@ -51,7 +51,7 @@ public class MainTest extends Application {
     }
 
     public static void other(Stage primaryStage) throws Exception{
-        URL url = new URL("file:/C:\\dev\\app\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)\\1.导入\\0.导入视频\\play.mp4");
+        URL url = new URL("file:/E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)\\1.导入\\0.导入视频\\play.mp4");
         SimpleMediaPlayer player = SimpleMediaPlayer.newInstance(url.toString(),800,600);
         BorderPane.setAlignment(player,Pos.CENTER);
         primaryStage.setScene(new Scene(player, 1000, 800));
@@ -64,7 +64,7 @@ public class MainTest extends Application {
         Parent root = (Pane) fxmlLoader.load();
 
         CourseMainController controller = fxmlLoader.<CourseMainController>getController();
-        controller.initChapterInfo("C:\\dev\\app\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");
+        controller.initChapterInfo("E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");
         Scene mainScene = new Scene(root);
 
         //最大化窗口

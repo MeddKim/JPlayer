@@ -1,0 +1,17 @@
+.image-main-pane{
+    background-color: #61a2b1;
+}
+
+.switch-left{
+    -fx-graphic: url("../images/switch_left.png");
+    -fx-background-color:transparent;
+    -fx-opacity: 1;
+    -fx-end-margin: 100,100,100,0;
+}
+.switch-right{
+    -fx-graphic: url("../images/switch_right.png");
+    -fx-background-color:transparent;
+    -fx-opacity: 1;
+    -fx-end-margin: 100,100,100,0;
+}
+

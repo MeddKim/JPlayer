@@ -1,5 +1,6 @@
 package com.jplayer.player.controller;
 
+import com.jplayer.player.component.ImageSlider;
 import com.jplayer.player.component.media.ProtoMediaPlayer;
 import com.jplayer.player.domain.ChapterFile;
 import com.jplayer.player.domain.ChapterInfo;
@@ -7,6 +8,7 @@ import com.jplayer.player.utils.CommonUtils;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
@@ -30,8 +32,6 @@ public class CourseMainController {
     private BorderPane mainPane;
     @FXML
     private VBox chapterBox;
-    @FXML
-    private HBox fileThumbBox;
     @FXML
     private BorderPane containerPane;
 
@@ -85,19 +85,9 @@ public class CourseMainController {
     }
 
     private void setThumbBox(ChapterInfo chapterInfo){
-        this.fileThumbBox.getChildren().clear();
-        this.containerPane.setCenter(null);
-        for(ChapterFile chapterFile: chapterInfo.getChapterFiles()){
-            Image image = new Image(chapterFile.getThumbUrl());
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(200);
-            imageView.setFitWidth(100);
-            imageView.setUserData(chapterFile);
-            imageView.setOnMouseClicked(e -> {
-                setContainer(chapterFile);
-            });
-//            this.fileThumbBox.getChildren().add(imageView);
-        }
+        ImageSlider slider = new ImageSlider(960);
+        BorderPane.setAlignment(slider, Pos.TOP_CENTER);
+        this.containerPane.setBottom(slider);
     }
 
 

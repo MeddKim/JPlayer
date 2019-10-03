@@ -15,9 +15,6 @@
                 <Insets top="-100" bottom="0" right="50" left="-50"></Insets>
             </BorderPane.margin>
             <bottom>
-                <HBox fx:id="fileThumbBox" spacing="30" alignment="CENTER">
-
-                </HBox>
             </bottom>
         </BorderPane>
     </center>

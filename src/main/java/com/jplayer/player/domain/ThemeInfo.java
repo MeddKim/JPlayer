@@ -13,5 +13,9 @@ public class ThemeInfo {
     private String themeId;
     private String themeName;
     private String themePath;
+    /**
+     * 配合UI
+     */
+    private Boolean isSelected;
     List<CourseBaseInfo> course;
 }

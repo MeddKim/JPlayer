@@ -5,7 +5,9 @@ package com.jplayer;
  * @date 2019/9/29
  */
 
+import com.jplayer.player.component.ImageSlider;
 import com.jplayer.player.component.media.ProtoMediaPlayer;
+import com.jplayer.player.component.pdf.PdfReaderPane;
 import com.jplayer.player.component.simple.SimpleMediaPlayer;
 import com.jplayer.player.controller.CourseMainController;
 import javafx.application.Application;
@@ -30,9 +32,12 @@ public class MainTest extends Application {
     public void start(Stage primaryStage) throws Exception{
 
 //        my(primaryStage);
-        other(primaryStage);
-        pane(primaryStage);
+//        other(primaryStage);
+//        pane(primaryStage);
+//        imageSlider(primaryStage);
+        pdf(primaryStage);
     }
+
 
     public static void my(Stage primaryStage) throws Exception{
         //创建测试窗口
@@ -81,6 +86,22 @@ public class MainTest extends Application {
         primaryStage.setOnCloseRequest(e -> Platform.exit());
     }
 
+    public static void imageSlider(Stage primaryStage) throws Exception{
+
+        ImageSlider slider = new ImageSlider(1000);
+        BorderPane.setAlignment(slider,Pos.CENTER);
+        primaryStage.setScene(new Scene(slider));
+
+        System.out.println("slider width:"+slider.getWidth());
+        primaryStage.show();
+    }
+
+
+    public static void pdf(Stage primaryStage) throws Exception{
+        PdfReaderPane pdfReader = new PdfReaderPane();
+        primaryStage.setScene(new Scene(pdfReader, 1000, 800));
+        primaryStage.show();
+    }
     public static void main(String[] args) {
         launch(args);
     }

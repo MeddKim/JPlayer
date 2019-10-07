@@ -33,7 +33,8 @@ public class MainTest extends Application {
 //        other(primaryStage);
 //        pane(primaryStage);
 //        imageSlider(primaryStage);
-        pdf(primaryStage);
+//        pdf(primaryStage);
+        bootBg(primaryStage);
     }
 
 
@@ -98,6 +99,24 @@ public class MainTest extends Application {
     public static void pdf(Stage primaryStage) throws Exception{
         PdfReaderPane pdfReader = new PdfReaderPane(960,800);
         primaryStage.setScene(new Scene(pdfReader, 1000, 800));
+        primaryStage.show();
+    }
+
+    public static void bootBg(Stage primaryStage) throws Exception{
+        FXMLLoader fxmlLoader = new FXMLLoader(MainTest.class.getResource("/views/BootPage.fxml"));
+        Parent root = (Pane) fxmlLoader.load();
+
+//        controller.initChapterInfo("E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");
+        Scene mainScene = new Scene(root);
+
+        //最大化窗口
+        primaryStage.setMaximized(true);
+        //取消所有默认设置（最大最小化，logo image等等）
+//        primaryStage.initStyle(StageStyle.UNDECORATED);
+
+        //设置任务栏logo
+        primaryStage.getIcons().add(new Image(MainTest.class.getClassLoader().getResource("images/plug.png").toString()));
+        primaryStage.setScene(mainScene);
         primaryStage.show();
     }
     public static void main(String[] args) {

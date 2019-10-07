@@ -15,7 +15,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
+import java.io.*;
+import java.util.Properties;
 
 /**
  * @author Wyatt
@@ -43,6 +44,11 @@ public class MainLauncher extends Application {
 
     public static ModuleSelectController moduleSelectCon;
 
+
+    public static String coursePath;
+    public static String bootImgPath;
+    public static String bootImg;
+    public static String bootSlogan;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -87,16 +93,39 @@ public class MainLauncher extends Application {
 
 
     public void initModuleInfo(){
-        String projectPath = System.getProperty("user.dir");
-        log.info("project path : {}",projectPath);
-        String coursePath = projectPath + File.separator + "course";
-        log.info("course path: {}",coursePath);
         moduleSelectCon.initModuleInfo(coursePath);
     }
 
 
 
     public static void main(String[] args) {
+        loadConfig();
         launch(args);
+    }
+
+    public static void loadConfig(){
+        BufferedReader bufferedReader = null;
+        try {
+            String projectPath = System.getProperty("user.dir");
+            String configPath = projectPath + File.separator + "config.properties";
+            Properties props = new Properties();
+            bufferedReader = new BufferedReader(new FileReader(configPath));
+            props.load(bufferedReader);
+            coursePath = props.getProperty("coursePath",System.getProperty("user.dir") + File.separator + "course");
+            bootImgPath = props.getProperty("bootImgPath",System.getProperty("user.dir") + File.separator + "bg");
+            bootImg = props.getProperty("bootImg","1");
+            bootSlogan = props.getProperty("bootSlogan","柱石计划跆拳道馆");
+        }catch (Exception e){
+            log.error("加载配置文件错误",e);
+        }finally {
+            if(bufferedReader != null){
+                try {
+                    bufferedReader.close();
+                }catch (Exception e){
+
+                }
+            }
+        }
+
     }
 }

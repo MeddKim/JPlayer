@@ -10,11 +10,11 @@
 <?import javafx.scene.control.Button?>
 <?import java.net.URL?>
 <GridPane fx:controller="com.jplayer.demo.chapter01.FXMLExampleController"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" styleClass="root">
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" styleClass="root" gridLinesVisible="true">
     <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
 
     <Text id="welcom-text" text="Welcome"
-          GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+          GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"></Text>
 
     <Label text="User Name:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
     <TextField text="User Name:" GridPane.columnIndex="1" GridPane.rowIndex="1"/>

@@ -224,7 +224,6 @@ public class ProtoMediaPlayer extends BorderPane {
         mediaPlayer.setOnReady(new Runnable(){
             @Override
             public void run() {
-                System.out.println("播放准备好");
                 duration = mediaPlayer.getMedia().getDuration();
                 volumeValue = mediaPlayer.getVolume();
                 mediaView.setFitWidth(width);

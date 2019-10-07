@@ -35,14 +35,18 @@ public class PdfReaderPane extends ScrollPane {
 
     private double zoom = 1.0 ;
 
-    public PdfReaderPane(){
+    public PdfReaderPane(double width,double height){
+        this.height = height;
+        this.width = width;
+        this.setMaxWidth(width);
+        this.setMaxHeight(height);
         this.contentBox = new VBox();
         this.contentView = new ImageView();
         this.contentBox.getChildren().add(this.contentView);
         this.setContent(this.contentBox);
-        loadPdfDocument("C:\\Users\\Administrator\\Desktop\\深入理解c指针.pdf");
+//        loadPdfDocument("C:\\Users\\Administrator\\Desktop\\Shiro教程.pdf");
     }
-    private void loadPdfDocument( String filePath ){
+    public void loadPdfDocument( String filePath ){
         destroy();
         this.document = new Document();
         try {
@@ -101,9 +105,9 @@ public class PdfReaderPane extends ScrollPane {
     }
 
 
-    private void destroy(){
-        if( document != null ){
-            document.dispose();
+    public void destroy(){
+        if( this.document != null ){
+            this.document.dispose();
         }
     }
 

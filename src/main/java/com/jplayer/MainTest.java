@@ -5,7 +5,6 @@ package com.jplayer;
  * @date 2019/9/29
  */
 
-import com.jplayer.player.component.ImageSlider;
 import com.jplayer.player.component.media.ProtoMediaPlayer;
 import com.jplayer.player.component.pdf.PdfReaderPane;
 import com.jplayer.player.component.simple.SimpleMediaPlayer;
@@ -20,7 +19,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.net.URL;
 
@@ -69,7 +67,7 @@ public class MainTest extends Application {
         Parent root = (Pane) fxmlLoader.load();
 
         CourseMainController controller = fxmlLoader.<CourseMainController>getController();
-        controller.initChapterInfo("E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");
+//        controller.initChapterInfo("E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");
         Scene mainScene = new Scene(root);
 
         //最大化窗口
@@ -88,17 +86,17 @@ public class MainTest extends Application {
 
     public static void imageSlider(Stage primaryStage) throws Exception{
 
-        ImageSlider slider = new ImageSlider(1000);
-        BorderPane.setAlignment(slider,Pos.CENTER);
-        primaryStage.setScene(new Scene(slider));
-
-        System.out.println("slider width:"+slider.getWidth());
-        primaryStage.show();
+//        ImageSlider slider = new ImageSlider(1000);
+//        BorderPane.setAlignment(slider,Pos.CENTER);
+//        primaryStage.setScene(new Scene(slider));
+//
+//        System.out.println("slider width:"+slider.getWidth());
+//        primaryStage.show();
     }
 
 
     public static void pdf(Stage primaryStage) throws Exception{
-        PdfReaderPane pdfReader = new PdfReaderPane();
+        PdfReaderPane pdfReader = new PdfReaderPane(960,800);
         primaryStage.setScene(new Scene(pdfReader, 1000, 800));
         primaryStage.show();
     }

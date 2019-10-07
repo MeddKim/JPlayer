@@ -1,7 +1,5 @@
 package com.jplayer.player.enums;
 
-import lombok.Data;
-
 /**
  * @author Willard
  * @date 2019/9/27
@@ -19,7 +17,12 @@ public enum ChapterBtnEnum {
     /**
      *启发
      */
-    AROUSE("启发","arouse-btn");
+    AROUSE("启发","arouse-btn"),
+
+    /**
+     * 教案
+     */
+    LESSON_PLAN("教案","plan-btn");
 
     private String dirName;
     private String btnStyle;
@@ -39,8 +42,12 @@ public enum ChapterBtnEnum {
         if(AROUSE.dirName.equals(dirName)){
             return AROUSE;
         }
+        if(LESSON_PLAN.dirName.equals(dirName)){
+            return LESSON_PLAN;
+        }
         return null;
     }
+
 
     public String getDirName() {
         return dirName;

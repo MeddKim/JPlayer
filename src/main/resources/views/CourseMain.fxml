@@ -19,7 +19,7 @@
         </BorderPane>
     </center>
     <top>
-        <Button mnemonicParsing="false" styleClass="home_btn" BorderPane.alignment="CENTER_RIGHT" />
+        <Button mnemonicParsing="false" styleClass="home_btn" BorderPane.alignment="CENTER_RIGHT" onAction="#returnCourseSelect"/>
     </top>
     <left>
         <VBox alignment="TOP_LEFT" styleClass="chapter-box" fx:id="chapterBox" spacing="50">

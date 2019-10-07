@@ -15,6 +15,10 @@ public class ChapterInfo {
     private String chapterName;
     private String chapterPath;
     private ChapterBtnEnum chapterType;
+    /**
+     * 配合UI是否选中
+     */
+    private Boolean isSelected;
 
     List<ChapterFile> chapterFiles;
 }

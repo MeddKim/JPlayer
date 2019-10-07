@@ -1,5 +1,10 @@
 package com.jplayer.player.controller;
 
+import com.google.common.collect.Lists;
+import com.jplayer.MainLauncher;
+import com.jplayer.player.component.imgslider.ImageEventListener;
+import com.jplayer.player.component.imgslider.ImageSlider;
+import com.jplayer.player.component.imgslider.SliderEvent;
 import com.jplayer.player.domain.CourseBaseInfo;
 import com.jplayer.player.domain.ThemeInfo;
 import com.jplayer.player.utils.CommonUtils;
@@ -7,14 +12,13 @@ import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -31,20 +35,26 @@ import static com.jplayer.MainLauncher.screenWidth;
  * @date 2019-09-15
  */
 @Slf4j
-public class CourseSelectController {
+public class CourseSelectController implements ImageEventListener {
 
     @FXML
     private HBox themeBox;
-    @FXML
-    private HBox courseBox;
 
+    @FXML
+    private BorderPane mainPane;
     private Scene scene;
 
     private int defaultTheme = 0;
 
     private int defaultCourse = 0;
 
+    private double sliderWidth = 800;
+
+    private ImageSlider imageSlider;
+
     public static CourseMainController courseMainCon;
+
+    private String currentPath;
 
     public void closeSystem(){
         Platform.exit();
@@ -52,11 +62,15 @@ public class CourseSelectController {
     }
 
     public void initCourseInfo(String modulePath){
+        this.currentPath = modulePath;
+        calLayout();
         ArrayList<ThemeInfo> themeInfos = CommonUtils.getThemeInfo(modulePath);
         initThemeBox(themeInfos);
-        addCourseBox(themeInfos.get(defaultTheme));
+        setCourseImageSlider(themeInfos.get(defaultTheme));
     }
-
+    void calLayout(){
+        this.sliderWidth = MainLauncher.globalAppWidth;
+    }
     /**
      * 填充主题选择Box
      */
@@ -77,7 +91,7 @@ public class CourseSelectController {
                 (ObservableValue<? extends Toggle> ov,
                  Toggle toggle, Toggle new_toggle) -> {
                ThemeInfo themeInfo = (ThemeInfo) group.getSelectedToggle().getUserData();
-               addCourseBox(themeInfo);
+               setCourseImageSlider(themeInfo);
         });
     }
 
@@ -86,31 +100,20 @@ public class CourseSelectController {
      * 填充课程选择box
      * @param themeInfo
      */
-    private void addCourseBox(ThemeInfo themeInfo){
-        this.courseBox.getChildren().clear();
+    private void setCourseImageSlider(ThemeInfo themeInfo){
         List<CourseBaseInfo> courseBaseInfos = themeInfo.getCourse();
+        List<SliderEvent> imageDatas = Lists.newArrayList();
         for(CourseBaseInfo courseBaseInfo : courseBaseInfos){
-            Button button = new Button();
-            Image image = new Image(courseBaseInfo.getBgUrl());
-            ImageView imageView = new ImageView(image);
-            button.setUserData(courseBaseInfo);
-            button.setGraphic(imageView);
-            button.setOnMouseClicked(event -> {
-                Button btn = (Button)event.getSource();
-                CourseBaseInfo baseInfo = (CourseBaseInfo) btn.getUserData();
-                try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/CourseMain.fxml"));
-                    Parent root = (Pane) fxmlLoader.load();
-                    courseMainCon = fxmlLoader.<CourseMainController>getController();
-                    this.scene = new Scene(root);
-                    showCourseMainScene(baseInfo.getCoursePath());
-                }catch (Exception e){
-                    log.info("加载main出错",e);
-                }
-
-            });
-            this.courseBox.getChildren().add(button);
+            SliderEvent sliderEvent = new SliderEvent();
+            sliderEvent.setImagePath(courseBaseInfo.getBgUrl());
+            sliderEvent.setData(courseBaseInfo);
+            imageDatas.add(sliderEvent);
         }
+        this.imageSlider = new ImageSlider(this.sliderWidth,true);
+        BorderPane.setAlignment(this.imageSlider, Pos.CENTER);
+        this.imageSlider.addListener(this);
+        this.imageSlider.initImages(imageDatas);
+        this.mainPane.setCenter(this.imageSlider);
     }
 
     private ToggleButton createThemeBtn(ThemeInfo themeInfo){
@@ -128,8 +131,21 @@ public class CourseSelectController {
             stage.setMaximized(true);
             stage.setWidth(screenWidth);
             stage.setHeight(screenHeight);
-            courseMainCon.initChapterInfo(coursePath);
+            courseMainCon.initChapterInfo(coursePath,this.currentPath);
         });
     }
 
+    @Override
+    public void handleEvent(SliderEvent event) {
+                CourseBaseInfo baseInfo = (CourseBaseInfo) event.getData();
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/CourseMain.fxml"));
+                    Parent root = (Pane) fxmlLoader.load();
+                    courseMainCon = fxmlLoader.<CourseMainController>getController();
+                    this.scene = new Scene(root);
+                    showCourseMainScene(baseInfo.getCoursePath());
+                }catch (Exception e){
+                    log.info("加载main出错",e);
+                }
+    }
 }

@@ -85,28 +85,39 @@ public class CommonUtils {
                 String[] chapterNames = chapterDir.getName().split(ID_NAME_SPLIT);
                 if(chapterNames.length == 2){
                     ChapterInfo chapterInfo = new ChapterInfo();
+                    chapterInfo.setIsSelected(false);
                     chapterInfo.setChapterId(chapterNames[0]);
                     chapterInfo.setChapterName(chapterNames[1]);
                     chapterInfo.setChapterPath(chapterDir.getAbsolutePath());
                     chapterInfo.setChapterType(ChapterBtnEnum.getTypeFromDir(chapterNames[1]));
                     List<ChapterFile> chapterFiles = new ArrayList<>();
-                    for(File fileDir : chapterDir.listFiles()){
-                        if(fileDir.isDirectory()){
-                            String[] chapterFileNames = fileDir.getName().split(ID_NAME_SPLIT);
-                            if(chapterFileNames.length == 2){
-                                ChapterFile chapterFile = new ChapterFile();
-                                chapterFile.setFileId(chapterFileNames[0]);
-                                chapterFile.setFileName(chapterFileNames[1]);
-                                if(chapterFileNames[1].contains("视频")){
-                                    chapterFile.setType(FileType.VEDIO);
-                                    chapterFile.setPlayUrl(VIDEO_PREX + fileDir.getAbsolutePath() + File.separator + "play.mp4");
-                                    chapterFile.setThumbUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator +"thumb.png");
-                                }else {
-                                    chapterFile.setType(FileType.IMG);
-                                    chapterFile.setPlayUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "voice_play_bg.jpg");
-                                    chapterFile.setThumbUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "voice_img.jpg");
+                    if(ChapterBtnEnum.LESSON_PLAN.equals(chapterInfo.getChapterType())){
+                        ChapterFile chapterFile = new ChapterFile();
+                        chapterFile.setPlayUrl(chapterDir.getAbsolutePath() + File.separator + "jiaoan.pdf");
+                        chapterFile.setType(FileType.PDF);
+                        chapterFiles.add(chapterFile);
+                    }else {
+                        for(File fileDir : chapterDir.listFiles()){
+                            if(fileDir.isDirectory()){
+                                String[] chapterFileNames = fileDir.getName().split(ID_NAME_SPLIT);
+                                if(chapterFileNames.length == 2){
+                                    ChapterFile chapterFile = new ChapterFile();
+                                    chapterFile.setFileId(chapterFileNames[0]);
+                                    chapterFile.setFileName(chapterFileNames[1]);
+                                    if(chapterFileNames[1].contains("视频")){
+                                        chapterFile.setType(FileType.VEDIO);
+                                        chapterFile.setPlayUrl(VIDEO_PREX + fileDir.getAbsolutePath() + File.separator + "play.mp4");
+                                        chapterFile.setThumbUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator +"thumb.png");
+                                    }else if(chapterFileNames[1].contains("教案")){
+                                        chapterFile.setType(FileType.PDF);
+                                        chapterFile.setPlayUrl(fileDir.getAbsolutePath() + File.separator + "jiaoan.pdf");
+                                    }else{
+                                        chapterFile.setType(FileType.IMG);
+                                        chapterFile.setPlayUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "voice_play_bg.jpg");
+                                        chapterFile.setThumbUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "voice_img.jpg");
+                                    }
+                                    chapterFiles.add(chapterFile);
                                 }
-                                chapterFiles.add(chapterFile);
                             }
                         }
                     }

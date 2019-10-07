@@ -3,15 +3,13 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<BorderPane styleClass="main-pane" stylesheets="/styles/course-select.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jplayer.player.controller.CourseSelectController">
+<BorderPane styleClass="main-pane" stylesheets="/styles/course-select.css" fx:id="mainPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jplayer.player.controller.CourseSelectController">
     <top>
         <HBox alignment="CENTER" styleClass="theme-box" fx:id="themeBox" spacing="30">
         </HBox>
     </top>
     <center>
-        <HBox alignment="CENTER" styleClass="course-box" fx:id="courseBox" spacing="30">
 
-        </HBox>
    </center>
    <bottom>
       <Button mnemonicParsing="false" onAction="#closeSystem" styleClass="exit_btn" BorderPane.alignment="CENTER_RIGHT" />

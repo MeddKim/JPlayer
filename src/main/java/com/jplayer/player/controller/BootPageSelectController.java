@@ -4,13 +4,18 @@ import com.google.common.base.Strings;
 import com.jplayer.MainLauncher;
 import com.jplayer.player.utils.CommonUtils;
 import com.jplayer.player.utils.SafeProperties;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +26,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
+
+import static com.jplayer.MainLauncher.*;
 
 /**
  * @author Wyatt
@@ -38,6 +45,10 @@ public class BootPageSelectController {
     private GridPane containerPane;
     @FXML
     public TextField bootSloganTextFiled;
+
+    public static BootPageController bootPageController;
+
+    private Scene scene;
 
 
     private String bootImg;
@@ -101,7 +112,7 @@ public class BootPageSelectController {
     }
 
     public void cancel(){
-
+        bootPage();
     }
 
     public void confirm(){
@@ -112,8 +123,7 @@ public class BootPageSelectController {
         if(!this.bootImg.equals(MainLauncher.bootImg) || !this.bootSlogan.equals(MainLauncher.bootSlogan)){
             saveNewConfig();
         }
-
-
+        bootPage();
     }
 
     void saveNewConfig(){
@@ -134,8 +144,10 @@ public class BootPageSelectController {
                 props.setProperty("bootSlogan",this.bootSlogan);
             }
             props.store(oFile,"");
-
             oFile.close();
+
+            MainLauncher.bootImg = this.bootImg;
+            MainLauncher.bootSlogan = this.bootSlogan;
         }catch (Exception e){
             log.error("加载配置文件错误",e);
         }finally {
@@ -166,7 +178,25 @@ public class BootPageSelectController {
             }catch (Exception e){
                 log.error("copy error",e);
             }
+        }
+    }
 
+    public void bootPage(){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/BootPage.fxml"));
+            Parent root = (Pane) fxmlLoader.load();
+            bootPageController = fxmlLoader.<BootPageController>getController();
+            this.scene = new Scene(root);
+            Platform.runLater(()-> {
+                Stage stage = (Stage) mainPane.getScene().getWindow();
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.setMaximized(true);
+                stage.setWidth(screenWidth);
+                stage.setHeight(screenHeight);
+            });
+        }catch (Exception e){
+            log.info("跳转错误",e);
         }
     }
 }

@@ -50,11 +50,42 @@ public class MainLauncher extends Application {
     public static String bootImg;
     public static String bootSlogan;
 
+//    @Override
+//    public void start(Stage primaryStage) throws Exception {
+//        initScreenInfo();
+//        primaryStageObj = primaryStage;
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/ModuleSelect.fxml"));
+//        Parent root = (Pane) fxmlLoader.load();
+//        Scene mainScene;
+//        if(isMaximized){
+//            //最大化窗口
+//            primaryStage.setMaximized(true);
+//            mainScene = new Scene(root);
+//        }else{
+//            mainScene = new Scene(root,globalAppWidth,globalAppHeight);
+//        }
+//
+//        //取消所有默认设置（最大最小化，logo image等等）
+//        primaryStage.initStyle(StageStyle.UNDECORATED);
+//        //设置任务栏logo
+//        primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResource("images/plug.png").toString()));
+//        primaryStage.setScene(mainScene);
+//        primaryStage.show();
+//
+//
+//        moduleSelectCon = fxmlLoader.<ModuleSelectController>getController();
+//
+//
+//        initModuleInfo();
+//
+//        primaryStage.setOnCloseRequest(e -> Platform.exit());
+//    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         initScreenInfo();
         primaryStageObj = primaryStage;
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/ModuleSelect.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/BootPage.fxml"));
         Parent root = (Pane) fxmlLoader.load();
         Scene mainScene;
         if(isMaximized){
@@ -71,14 +102,9 @@ public class MainLauncher extends Application {
         primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResource("images/plug.png").toString()));
         primaryStage.setScene(mainScene);
         primaryStage.show();
-
-
-        moduleSelectCon = fxmlLoader.<ModuleSelectController>getController();
-        initModuleInfo();
-
         primaryStage.setOnCloseRequest(e -> Platform.exit());
-    }
 
+    }
     public void initScreenInfo(){
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         screenHeight = primaryScreenBounds.getHeight();
@@ -89,11 +115,6 @@ public class MainLauncher extends Application {
         isMaximized = screenScaleEnum.getFullScreen();
 
         log.info("应用宽应为{}，高应为：{}，是否展示全屏：{}",globalAppWidth,globalAppHeight,isMaximized);
-    }
-
-
-    public void initModuleInfo(){
-        moduleSelectCon.initModuleInfo(coursePath);
     }
 
 

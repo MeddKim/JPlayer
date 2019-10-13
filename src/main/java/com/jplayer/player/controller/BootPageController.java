@@ -12,10 +12,14 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static com.jplayer.MainLauncher.*;
 
@@ -28,6 +32,8 @@ public class BootPageController {
 
     public static ModuleSelectController moduleSelectController;
     public static BootPageSelectController bootPageSelectController;
+
+    public static ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,new BasicThreadFactory.Builder().namingPattern("Wait-Pool" + "-thread-%d").daemon(true).build());
 
     private Scene scene;
 
@@ -49,10 +55,9 @@ public class BootPageController {
         }
         logoLabel.setText(bootSlogan);
         logoLabel.setPadding(new Insets(0,0,50,0));
-
+//        BootPageController.executorService.schedule(new WaitCallable(),0L,TimeUnit.MINUTES);
     }
     public void changeBootBackground(){
-
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/BootPageSelect.fxml"));
             Parent root = (Pane) fxmlLoader.load();
@@ -61,16 +66,18 @@ public class BootPageController {
             Platform.runLater(()-> {
                 Stage stage = (Stage) mainPane.getScene().getWindow();
                 stage.setScene(scene);
+                stage.setWidth(globalAppWidth);
+                stage.setHeight(globalAppHeight);
                 stage.setResizable(false);
                 stage.setMaximized(true);
                 stage.setWidth(screenWidth);
-                stage.setHeight(screenHeight);
             });
         }catch (Exception e){
             log.info("跳转错误");
         }
     }
     public void enterMain(){
+        System.out.println("哈哈哈哈");
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/ModuleSelect.fxml"));
             Parent root = (Pane) fxmlLoader.load();
@@ -78,11 +85,11 @@ public class BootPageController {
             this.scene = new Scene(root);
             Platform.runLater(()-> {
                 Stage stage = (Stage) mainPane.getScene().getWindow();
+                stage.setWidth(globalAppWidth);
+                stage.setHeight(globalAppHeight);
                 stage.setScene(scene);
                 stage.setResizable(false);
                 stage.setMaximized(true);
-                stage.setWidth(screenWidth);
-                stage.setHeight(screenHeight);
                 moduleSelectController.initModuleInfo(coursePath);
             });
         }catch (Exception e){

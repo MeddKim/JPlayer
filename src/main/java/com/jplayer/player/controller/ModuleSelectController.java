@@ -17,8 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 
-import static com.jplayer.MainLauncher.screenHeight;
-import static com.jplayer.MainLauncher.screenWidth;
+import static com.jplayer.MainLauncher.*;
 
 /**
  * @author Willard
@@ -73,8 +72,8 @@ public class ModuleSelectController {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setMaximized(true);
-            stage.setWidth(screenWidth);
-            stage.setHeight(screenHeight);
+            stage.setWidth(globalAppWidth);
+            stage.setHeight(globalAppHeight);
             con.initCourseInfo(modulePath);
         });
     }

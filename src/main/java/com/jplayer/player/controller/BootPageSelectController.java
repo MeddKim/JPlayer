@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +27,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static com.jplayer.MainLauncher.*;
 
@@ -192,8 +196,8 @@ public class BootPageSelectController {
                 stage.setScene(scene);
                 stage.setResizable(false);
                 stage.setMaximized(true);
-                stage.setWidth(screenWidth);
-                stage.setHeight(screenHeight);
+                stage.setWidth(globalAppWidth);
+                stage.setHeight(globalAppHeight);
             });
         }catch (Exception e){
             log.info("跳转错误",e);

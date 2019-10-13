@@ -106,10 +106,10 @@ public class CourseMainController implements ImageEventListener {
     }
 
     private void calLayout(){
-        if(ScreenScaleEnum.W_16_9_2560.getAppWidth() == MainLauncher.globalAppWidth || ScreenScaleEnum.W_16_9_1920.getAppWidth() == MainLauncher.globalAppWidth){
+        if(ScreenScaleEnum.W_16_9_2560.getAppWidth() == MainLauncher.globalAppWidth){
             this.mediaWidth = ScreenScaleEnum.W_16_9_1366.getAppWidth();
             this.mediaHeight = ScreenScaleEnum.W_16_9_1366.getAppHeight();
-        }else if(ScreenScaleEnum.W_16_9_1366.getAppWidth() == MainLauncher.globalAppWidth){
+        }else if(ScreenScaleEnum.W_16_9_1366.getAppWidth() == MainLauncher.globalAppWidth || ScreenScaleEnum.W_16_9_1920.getAppWidth() == MainLauncher.globalAppWidth){
             this.mediaWidth = ScreenScaleEnum.W_16_9_960.getAppWidth();
             this.mediaHeight = ScreenScaleEnum.W_16_9_960.getAppHeight();
         }

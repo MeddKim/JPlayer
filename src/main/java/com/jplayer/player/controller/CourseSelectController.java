@@ -27,8 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jplayer.MainLauncher.screenHeight;
-import static com.jplayer.MainLauncher.screenWidth;
+import static com.jplayer.MainLauncher.*;
 
 /**
  * @author Wyatt
@@ -129,8 +128,8 @@ public class CourseSelectController implements ImageEventListener {
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setMaximized(true);
-            stage.setWidth(screenWidth);
-            stage.setHeight(screenHeight);
+            stage.setWidth(globalAppWidth);
+            stage.setHeight(globalAppHeight);
             courseMainCon.initChapterInfo(coursePath,this.currentPath);
         });
     }

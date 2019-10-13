@@ -1,6 +1,8 @@
 package com.jplayer;
 
+import com.jplayer.player.controller.BootPageController;
 import com.jplayer.player.controller.ModuleSelectController;
+import com.jplayer.player.controller.WaitCallable;
 import com.jplayer.player.enums.ScreenScaleEnum;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Wyatt
@@ -103,8 +106,10 @@ public class MainLauncher extends Application {
         primaryStage.setScene(mainScene);
         primaryStage.show();
         primaryStage.setOnCloseRequest(e -> Platform.exit());
-
+        System.out.println(primaryStage.hashCode());
     }
+
+
     public void initScreenInfo(){
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         screenHeight = primaryScreenBounds.getHeight();

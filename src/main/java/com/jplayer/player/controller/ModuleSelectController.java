@@ -78,4 +78,9 @@ public class ModuleSelectController {
         });
     }
 
+    public void closeSystem(){
+        Platform.exit();
+        System.exit(0);
+    }
+
 }

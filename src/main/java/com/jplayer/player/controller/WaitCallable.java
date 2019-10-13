@@ -15,22 +15,19 @@ import java.util.concurrent.Callable;
  * @date 2019/10/8
  */
 @Slf4j
-public class WaitCallable implements Callable<String> {
+public class WaitCallable implements Runnable {
 
     public WaitCallable(){
     }
+
     @Override
-    public String call() throws Exception {
-//        while (true){
-//            Thread.sleep(5000);
-//            log.info("线程{}正在等待：" + Thread.currentThread().getName());
-//        }
-        Thread.sleep(3000);
-         try {
+    public void run() {
+        try {
+            Thread.sleep(3000);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/ModuleSelect.fxml"));
             Parent root = (Pane) fxmlLoader.load();
-             ModuleSelectController controller = fxmlLoader.<ModuleSelectController>getController();
-           Scene newScene = new Scene(root);
+            ModuleSelectController controller = fxmlLoader.<ModuleSelectController>getController();
+            Scene newScene = new Scene(root);
             Platform.runLater(()-> {
 
                 MainLauncher.primaryStageObj.setScene(newScene);
@@ -43,6 +40,5 @@ public class WaitCallable implements Callable<String> {
         }catch (Exception e){
             log.info("跳转错误");
         }
-        return "success";
     }
 }

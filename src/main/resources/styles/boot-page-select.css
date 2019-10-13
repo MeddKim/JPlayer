@@ -1,3 +1,8 @@
 .root{
     -fx-font-size: 30;
 }
+
+.button{
+    -fx-background-color: rgba(23,200,230,0);
+    -fx-border-color: #666666;
+}

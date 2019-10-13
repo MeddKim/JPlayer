@@ -33,7 +33,7 @@ public class PdfReaderPane extends ScrollPane {
     private double pageWidth =  0.0 ;
     private double pageHeight = 0.0 ;
 
-    private double zoom = 1.0 ;
+    private double zoom = 1.5 ;
 
     public PdfReaderPane(double width,double height){
         this.height = height;

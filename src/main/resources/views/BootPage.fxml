@@ -3,13 +3,18 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.StackPane?>
 <BorderPane fx:id="mainPane" stylesheets="/styles/boot-page.css" styleClass="main-pane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jplayer.player.controller.BootPageController">
     <top>
         <Button fx:id="enterBtn" styleClass="enter-btn"  minWidth="100" minHeight="100" onAction="#enterMain"></Button>
     </top>
     <bottom>
-        <Label fx:id="logoLabel" onMouseClicked="#changeBootBackground" BorderPane.alignment="CENTER" styleClass="logo-label">
-            柱石计划跆拳道馆
-        </Label>
+        <BorderPane styleClass="enter_select_pane" onMouseClicked="#changeBootBackground" fx:id="enterSelectPane" minHeight="200" maxHeight="200">
+            <center>
+                <Label fx:id="logoLabel" BorderPane.alignment="CENTER" styleClass="logo-label">
+                    柱石计划跆拳道馆
+                </Label>
+            </center>
+        </BorderPane>
     </bottom>
 </BorderPane>

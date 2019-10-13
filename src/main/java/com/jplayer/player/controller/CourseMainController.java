@@ -15,6 +15,7 @@ import com.jplayer.player.utils.CommonUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -151,6 +152,7 @@ public class CourseMainController implements ImageEventListener {
                 Button btn = (Button)e.getSource();
                 selectButton(btn);
             });
+            VBox.setMargin(button, new Insets(0,0,0,-35));
             this.chapterBtns.add(button);
             chapterBox.getChildren().add(button);
         }

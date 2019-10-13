@@ -33,7 +33,9 @@ public class BootPageController {
     public static ModuleSelectController moduleSelectController;
     public static BootPageSelectController bootPageSelectController;
 
-    public static ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,new BasicThreadFactory.Builder().namingPattern("Wait-Pool" + "-thread-%d").daemon(true).build());
+//    public static ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(5,new BasicThreadFactory.Builder().namingPattern("Wait-Pool" + "-thread-%d").daemon(true).build());
+
+    private ScheduledExecutorService executorService;
 
     private Scene scene;
 
@@ -41,6 +43,8 @@ public class BootPageController {
     private BorderPane mainPane;
     @FXML
     private Label logoLabel;
+    @FXML
+    private BorderPane enterSelectPane;
 
     public void initialize() {
         String bgPath = " file:" + MainLauncher.bootImgPath + File.separator + MainLauncher.bootImg;
@@ -54,10 +58,23 @@ public class BootPageController {
             e.printStackTrace();
         }
         logoLabel.setText(bootSlogan);
-        logoLabel.setPadding(new Insets(0,0,50,0));
-//        BootPageController.executorService.schedule(new WaitCallable(),0L,TimeUnit.MINUTES);
+//        logoLabel.setPadding(new Insets(0,0,50,0));
+
+        addWaitThread();
     }
+
+    private void addWaitThread(){
+        this.executorService = new ScheduledThreadPoolExecutor(1,new BasicThreadFactory.Builder().namingPattern("Wait-Pool" + "-thread-%d").daemon(true).build());
+        this.executorService.execute(new WaitCallable());
+    }
+    /**
+     * 变更背景，需要停止等待跳转线程
+     */
     public void changeBootBackground(){
+        if(executorService != null ){
+            executorService.shutdownNow();
+        }
+//        executorService.
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/BootPageSelect.fxml"));
             Parent root = (Pane) fxmlLoader.load();
@@ -77,7 +94,6 @@ public class BootPageController {
         }
     }
     public void enterMain(){
-        System.out.println("哈哈哈哈");
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/ModuleSelect.fxml"));
             Parent root = (Pane) fxmlLoader.load();

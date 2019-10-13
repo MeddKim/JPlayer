@@ -166,6 +166,8 @@ public class ImageSlider extends BorderPane {
             imageView.setUserData(itemData.getData());
             imageView.setFitWidth(this.itemWidth);
             imageView.setFitHeight(this.itemHeight);
+            imageView.getStyleClass().add("item-image");
+            setImageViewSize(imageView,20);
             imageView.setOnMouseClicked(event -> {
                 ImageView source = (ImageView)event.getSource();
                 this.data = source.getUserData();
@@ -177,6 +179,19 @@ public class ImageSlider extends BorderPane {
         }
         initPageInfo();
         setControlBtn();
+    }
+
+    private void setImageViewSize(ImageView imageView, double size){
+        imageView.setOnMouseEntered(e->{
+            ImageView source = (ImageView)e.getSource();
+            source.setFitHeight(source.getFitHeight() + size);
+            source.setFitWidth(source.getFitWidth() + size);
+        });
+        imageView.setOnMouseExited(e->{
+            ImageView source = (ImageView)e.getSource();
+            source.setFitHeight(source.getFitHeight() - size);
+            source.setFitWidth(source.getFitWidth() - size);
+        });
     }
 
     public void initPageInfo(){

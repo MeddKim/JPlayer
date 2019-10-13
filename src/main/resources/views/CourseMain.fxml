@@ -22,7 +22,7 @@
         <Button mnemonicParsing="false" styleClass="home_btn" BorderPane.alignment="CENTER_RIGHT" onAction="#returnCourseSelect"/>
     </top>
     <left>
-        <VBox alignment="TOP_LEFT" styleClass="chapter-box" fx:id="chapterBox" spacing="50">
+        <VBox alignment="TOP_CENTER" styleClass="chapter-box" fx:id="chapterBox" spacing="50">
         </VBox>
     </left>
     <bottom>

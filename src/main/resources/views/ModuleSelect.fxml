@@ -2,10 +2,14 @@
 
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
 <BorderPane stylesheets="/styles/module-select.css" styleClass="main-pane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jplayer.player.controller.ModuleSelectController">
     <center>
         <HBox alignment="CENTER" styleClass="module-box" fx:id="moduleBox" spacing="30">
 
         </HBox>
     </center>
+    <bottom>
+        <Button mnemonicParsing="false" onAction="#closeSystem" styleClass="exit_btn" BorderPane.alignment="CENTER_RIGHT" />
+    </bottom>
 </BorderPane>

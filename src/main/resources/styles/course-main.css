@@ -19,18 +19,6 @@
     -fx-start-margin: 100,100,100,100;
 }
 
-.chapter-box .toggle-button{
-
-    -fx-background-color: rgba(23,200,230,0);
-    -fx-background-insets: 0;
-}
-
-.chapter-box .toggle-button:selected{
-    /*-fx-min-width: 287;*/
-    /*-fx-min-height: 105;*/
-    -fx-background-color: rgba(23,200,230,0);
-    -fx-background-insets: 0;
-}
 
 .chapter-box .import-btn{
     -fx-graphic: url("../images/course/import.png");
@@ -39,70 +27,70 @@
 }
 
 .chapter-box .import-btn-selected{
-    -fx-max-width: 287;
-    -fx-min-width: 105;
-    -fx-max-height: 287;
-    -fx-min-height: 105;
+    /*-fx-max-width: 287;*/
+    /*-fx-min-width: 105;*/
+    /*-fx-max-height: 287;*/
+    /*-fx-min-height: 105;*/
     -fx-background-color:transparent;
     -fx-opacity: 1;
     -fx-graphic: url("../images/course/import_selected.png");
 }
 
 .chapter-box .teach-btn{
-    -fx-max-width: 287;
-    -fx-min-width: 105;
-    -fx-max-height: 287;
-    -fx-min-height: 105;
+    /*-fx-max-width: 287;*/
+    /*-fx-min-width: 105;*/
+    /*-fx-max-height: 287;*/
+    /*-fx-min-height: 105;*/
     -fx-background-color:transparent;
     -fx-opacity: 1;
     -fx-graphic: url("../images/course/teach.png");
 }
 
 .chapter-box .teach-btn-selected{
-    -fx-max-width: 287;
-    -fx-min-width: 105;
-    -fx-max-height: 287;
-    -fx-min-height: 105;
+    /*-fx-max-width: 287;*/
+    /*-fx-min-width: 105;*/
+    /*-fx-max-height: 287;*/
+    /*-fx-min-height: 105;*/
     -fx-background-color:transparent;
     -fx-opacity: 1;
     -fx-graphic: url("../images/course/teach_selected.png");
 }
 
  .chapter-box .arouse-btn{
-     -fx-max-width: 287;
-     -fx-min-width: 105;
-     -fx-max-height: 287;
-     -fx-min-height: 105;
+     /*-fx-max-width: 287;*/
+     /*-fx-min-width: 105;*/
+     /*-fx-max-height: 287;*/
+     /*-fx-min-height: 105;*/
      -fx-background-color:transparent;
      -fx-opacity: 1;
      -fx-graphic: url("../images/course/arouse.png");
  }
 
 .chapter-box .arouse-btn-selected{
-    -fx-max-width: 287;
-    -fx-min-width: 105;
-    -fx-max-height: 287;
-    -fx-min-height: 105;
+    /*-fx-max-width: 287;*/
+    /*-fx-min-width: 105;*/
+    /*-fx-max-height: 287;*/
+    /*-fx-min-height: 105;*/
     -fx-background-color:transparent;
     -fx-opacity: 1;
     -fx-graphic: url("../images/course/arouse_selected.png");
 }
 
 .chapter-box .plan-btn{
-    -fx-max-width: 287;
-    -fx-min-width: 105;
-    -fx-max-height: 287;
-    -fx-min-height: 105;
+    /*-fx-max-width: 287;*/
+    /*-fx-min-width: 105;*/
+    /*-fx-max-height: 287;*/
+    /*-fx-min-height: 105;*/
     -fx-background-color:transparent;
     -fx-opacity: 1;
     -fx-graphic: url("../images/course/lesson_plan.png");
 }
 
 .chapter-box .plan-btn-selected{
-    -fx-max-width: 287;
-    -fx-min-width: 105;
-    -fx-max-height: 287;
-    -fx-min-height: 105;
+    /*-fx-max-width: 287;*/
+    /*-fx-min-width: 105;*/
+    /*-fx-max-height: 287;*/
+    /*-fx-min-height: 105;*/
     -fx-background-color:transparent;
     -fx-opacity: 1;
     -fx-graphic: url("../images/course/lesson_plan.png");

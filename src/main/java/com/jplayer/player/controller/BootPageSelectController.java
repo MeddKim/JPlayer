@@ -120,9 +120,6 @@ public class BootPageSelectController {
     }
 
     public void confirm(){
-        if(Strings.isNullOrEmpty(bootSloganTextFiled.getText().trim())){
-            return;
-        }
         this.bootSlogan = bootSloganTextFiled.getText().trim();
         if(!this.bootImg.equals(MainLauncher.bootImg) || !this.bootSlogan.equals(MainLauncher.bootSlogan)){
             saveNewConfig();

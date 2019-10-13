@@ -15,3 +15,6 @@
     -fx-end-margin: 100,100,100,0;
 }
 
+.item-image:hover{
+    -fx-opacity: 1;
+}

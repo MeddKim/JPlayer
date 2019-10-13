@@ -6,3 +6,9 @@
     -fx-background-color: rgba(23,200,230,0);
     -fx-background-insets: 0;
 }
+.exit_btn{
+    -fx-graphic: url("../images/exit.png");
+    -fx-background-color:transparent;
+    -fx-opacity: 1;
+    -fx-end-margin: 100,100,100,0;
+}

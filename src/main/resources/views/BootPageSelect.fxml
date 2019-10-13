@@ -18,13 +18,15 @@
                    GridPane.columnIndex="0" />
             <TextField text="柱石计划跆拳道馆" GridPane.rowIndex="1" fx:id="bootSloganTextFiled"
                        GridPane.columnIndex="1" GridPane.columnSpan="4"/>
+            <Label text="（可为空）" GridPane.rowIndex="1"
+                   GridPane.columnIndex="5" />
             <!--第三行-->
             <Label text="引导图" GridPane.rowIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP"
                    GridPane.columnIndex="0" />
             <ImageView GridPane.rowIndex="2" fitWidth="160" fitHeight="90"
                        GridPane.columnIndex="1" GridPane.columnSpan="3" fx:id="currentImg"/>
             <Button text="跟换引导图" GridPane.rowIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER"
-                    GridPane.columnIndex="4" onAction="#choseFile"></Button>
+                    GridPane.columnIndex="4" onAction="#choseFile" styleClass="change-pic-btn"></Button>
             <!-- 第四行  -->
             <Text text="历史引导图" GridPane.rowIndex="3" GridPane.halignment="LEFT"
                        GridPane.columnIndex="1" GridPane.columnSpan="2"/>

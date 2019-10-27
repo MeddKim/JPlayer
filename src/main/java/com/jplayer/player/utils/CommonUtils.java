@@ -1,10 +1,17 @@
 package com.jplayer.player.utils;
 
+import com.google.common.collect.Lists;
+import com.jplayer.MainLauncher;
 import com.jplayer.player.domain.*;
 import com.jplayer.player.enums.ChapterBtnEnum;
 import com.jplayer.player.enums.FileType;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -79,8 +86,15 @@ public class CommonUtils {
 
 
     public static ArrayList<ChapterInfo> getChapterInfo(String path){
+        return getChapterInfo(path,false);
+    }
+    public static ArrayList<ChapterInfo> getChapterInfo(String path,Boolean isCalMd5){
         ArrayList<ChapterInfo> chapterInfos = new ArrayList<>();
         File root = new File(path);
+        String md5Value = calPathMD5(path);
+        if(!isCalMd5 && !MainLauncher.globalMd5List.contains(md5Value)){
+           return Lists.newArrayList();
+        }
         for(File chapterDir: root.listFiles()){
             if(chapterDir.isDirectory()){
                 String[] chapterNames = chapterDir.getName().split(ID_NAME_SPLIT);
@@ -131,6 +145,48 @@ public class CommonUtils {
         return chapterInfos;
     }
 
+
+    public static String getNextCoursePath(String currentCoursePath){
+        File file = new File(currentCoursePath);
+        File parent = file.getParentFile();
+        File[] children = parent.listFiles();
+        Boolean isStopFind = false;
+        for(int i=0; i< children.length; i++){
+            if(i == children.length && children[i].getAbsolutePath().equals(currentCoursePath)){
+                return null;
+            }
+            if(isStopFind){
+               return children[i].getAbsolutePath();
+            }
+            if(children[i].getAbsolutePath().equals(currentCoursePath)){
+                isStopFind = true;
+            }
+        }
+        return null;
+    }
+
+    public static String getPreCoursePath(String currentCoursePath){
+        File file = new File(currentCoursePath);
+        File parent = file.getParentFile();
+        File[] children = parent.listFiles();
+        Boolean isStopFind = false;
+        String prePath = null;
+        for(int i=0; i< children.length; i++){
+            if(0 == i && children[i].getAbsolutePath().equals(currentCoursePath)){
+                return null;
+            }
+            if(children[i].getAbsolutePath().equals(currentCoursePath)){
+                isStopFind = true;
+            }
+            if(isStopFind){
+                return prePath;
+            }
+            prePath = children[i].getAbsolutePath();
+        }
+        return null;
+    }
+
+
     public static String[] chars = new String[] { "a", "b", "c", "d", "e", "f",
             "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
             "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5",
@@ -152,8 +208,69 @@ public class CommonUtils {
     }
 
 
+    public static String calFileMD5(String path) {
+        BigInteger bi = null;
+        try {
+            byte[] buffer = new byte[8192];
+            int len = 0;
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            File f = new File(path);
+            FileInputStream fis = new FileInputStream(f);
+            while ((len = fis.read(buffer)) != -1) {
+                md.update(buffer, 0, len);
+            }
+            fis.close();
+            byte[] b = md.digest();
+            bi = new BigInteger(1, b);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bi.toString(16);
+    }
+
+    public static String calPathMD5(String key) {
+        char hexDigits[] = {
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+        };
+        try {
+            byte[] btInput = key.getBytes();
+            // 获得MD5摘要算法的 MessageDigest 对象
+            MessageDigest mdInst = MessageDigest.getInstance("MD5");
+            // 使用指定的字节更新摘要
+            mdInst.update(btInput);
+            // 获得密文
+            byte[] md = mdInst.digest();
+            // 把密文转换成十六进制的字符串形式
+            int j = md.length;
+            char[] str = new char[j * 2];
+            int k = 0;
+            for (int i = 0; i < j; i++) {
+                byte byte0 = md[i];
+                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+                str[k++] = hexDigits[byte0 & 0xf];
+            }
+            return new String(str);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
     public static void main(String[] args) {
-        ArrayList<ChapterInfo> chapterInfos = getChapterInfo("E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");
-        System.out.println(chapterInfos.size());
+//        ArrayList<ChapterInfo> chapterInfos = getChapterInfo("E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");
+//        System.out.println(chapterInfos.size());
+//        String next = getNextCoursePath("D:\\dev\\app\\javaWorkspace\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\1.识别欺凌(2)");
+//        String next = getNextCoursePath("D:\\dev\\app\\javaWorkspace\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\9.鱼拓印");
+//        System.out.println(next);
+
+//                String pre = getPreCoursePath("D:\\dev\\app\\javaWorkspace\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\1.识别欺凌(2)");
+//        String pre = getNextCoursePath("D:\\dev\\app\\javaWorkspace\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\9.鱼拓印");
+//        System.out.println(pre);
+
+
+        String value = calPathMD5("D:\\dev\\app\\javaWorkspace\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\1.识别欺凌(2)\\1.导入\\0.导入视频\\play.mp4");
+        System.out.println(value);
     }
 }

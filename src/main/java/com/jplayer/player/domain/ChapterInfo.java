@@ -15,6 +15,10 @@ public class ChapterInfo {
     private String chapterName;
     private String chapterPath;
     private ChapterBtnEnum chapterType;
+
+    private String prePath;
+    private String currentPath;
+    private String nextPath;
     /**
      * 配合UI是否选中
      */

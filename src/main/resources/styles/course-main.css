@@ -101,3 +101,8 @@
     -fx-color:#9A9BA2;
     -fx-padding: 15;
 }
+
+.button{
+    -fx-background-color: rgba(23,200,230,0);
+    -fx-background-insets: 0;
+}

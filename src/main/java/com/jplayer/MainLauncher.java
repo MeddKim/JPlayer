@@ -1,5 +1,7 @@
 package com.jplayer;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.jplayer.player.controller.BootPageController;
 import com.jplayer.player.controller.ModuleSelectController;
 import com.jplayer.player.controller.WaitCallable;
@@ -18,6 +20,7 @@ import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -52,6 +55,8 @@ public class MainLauncher extends Application {
     public static String bootImgPath;
     public static String bootImg;
     public static String bootSlogan;
+
+    public static List<String> globalMd5List = Lists.newArrayList();
 
 //    @Override
 //    public void start(Stage primaryStage) throws Exception {
@@ -106,7 +111,6 @@ public class MainLauncher extends Application {
         primaryStage.setScene(mainScene);
         primaryStage.show();
         primaryStage.setOnCloseRequest(e -> Platform.exit());
-        System.out.println(primaryStage.hashCode());
     }
 
 
@@ -126,7 +130,38 @@ public class MainLauncher extends Application {
 
     public static void main(String[] args) {
         loadConfig();
+        loadMd5();
         launch(args);
+    }
+
+    public static void loadMd5(){
+        String filePath = System.getProperty("user.dir") + File.separator + "validpath.txt";
+        String content = readToString(filePath);
+        List<String> md5List = Lists.newArrayList(Splitter.on(",").split(content));
+        globalMd5List.addAll(md5List);
+    }
+
+    public static String readToString(String fileName) {
+        String encoding = "UTF-8";
+        File file = new File(fileName);
+        Long filelength = file.length();
+        byte[] filecontent = new byte[filelength.intValue()];
+        try {
+            FileInputStream in = new FileInputStream(file);
+            in.read(filecontent);
+            in.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            return new String(filecontent, encoding);
+        } catch (UnsupportedEncodingException e) {
+            System.err.println("The OS does not support " + encoding);
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static void loadConfig(){

@@ -77,19 +77,7 @@ public class CourseMainController implements ImageEventListener {
     private Button nextCourseBtn = new Button();
     private Button preCourseBtn = new Button();
 
-    /**
-     * 各种组件大小
-     */
-    private double chapterBtnWidth = 287;
-    private double chapterBtnHeight = 105;
-    private double homeBtnWidth = 110;
-    private double homeBtnHeight = 180;
 
-    /**
-     * 一下是需要计算得到的数据
-     */
-    private double containerWidth = 960;
-    private double containerHeight = 540;
 
     private double mediaWidth = 800;
     private double mediaHeight = 450;
@@ -172,6 +160,17 @@ public class CourseMainController implements ImageEventListener {
             this.chapterBtns.add(button);
             chapterBox.getChildren().add(button);
         }
+        // add the pre and next button
+        this.preCourseBtn.setOnMouseClicked(e -> {
+            courseChange(this.currentPath,false);
+        });
+        this.nextCourseBtn.setOnMouseClicked(e -> {
+            courseChange(this.currentPath,true);
+        });
+        this.chapterBox.getChildren().add(this.preCourseBtn);
+        this.chapterBox.getChildren().add(this.nextCourseBtn);
+        VBox.setMargin(this.preCourseBtn,new Insets(0,0,0,-35));
+        VBox.setMargin(this.nextCourseBtn,new Insets(0,0,0,-35));
         setContainer(chapterInfos.get(0).getChapterFiles().get(0));
 
     }
@@ -192,7 +191,7 @@ public class CourseMainController implements ImageEventListener {
         slider.addListener(this);
         slider.initImages(imageDatas);
         BorderPane.setAlignment(slider, Pos.TOP_CENTER);
-        BorderPane.setMargin(slider,new Insets(20,0,100,0));
+        BorderPane.setMargin(slider,new Insets(50,0,50,0));
         this.containerPane.setBottom(slider);
     }
 
@@ -325,13 +324,22 @@ public class CourseMainController implements ImageEventListener {
                 stage.setScene(scene);
                 stage.setResizable(false);
                 stage.setMaximized(true);
-                stage.setWidth(screenWidth);
-                stage.setHeight(screenHeight);
+                stage.setWidth(MainLauncher.globalAppWidth);
+                stage.setHeight(MainLauncher.globalAppWidth);
                 con.initCourseInfo(this.prePath);
             });
         }catch (Exception e){
 
         }
 
+    }
+
+
+    public void courseChange(String currentPath,Boolean isNextCourse){
+        String changePath = isNextCourse ? CommonUtils.getNextCoursePath(currentPath) : CommonUtils.getPreCoursePath(currentPath);
+        if(changePath == null){
+            return;
+        }
+        this.initChapterInfo(changePath,this.prePath);
     }
 }

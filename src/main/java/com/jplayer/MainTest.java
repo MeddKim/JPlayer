@@ -30,11 +30,11 @@ public class MainTest extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        my(primaryStage);
+//        my(primaryStage);
 //        other(primaryStage);
 //        pane(primaryStage);
 //        imageSlider(primaryStage);
-//        pdf(primaryStage);
+        pdf(primaryStage);
 //        bootBg(primaryStage);
     }
 

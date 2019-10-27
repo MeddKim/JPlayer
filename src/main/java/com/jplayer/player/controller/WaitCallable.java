@@ -33,8 +33,8 @@ public class WaitCallable implements Runnable {
                 MainLauncher.primaryStageObj.setScene(newScene);
                 MainLauncher.primaryStageObj.setResizable(false);
                 MainLauncher.primaryStageObj.setMaximized(true);
-                MainLauncher.primaryStageObj.setWidth(MainLauncher.screenWidth);
-                MainLauncher.primaryStageObj.setHeight(MainLauncher.screenHeight);
+                MainLauncher.primaryStageObj.setWidth(MainLauncher.globalAppWidth);
+                MainLauncher.primaryStageObj.setHeight(MainLauncher.globalAppHeight);
                 controller.initModuleInfo(MainLauncher.coursePath);
             });
         }catch (Exception e){

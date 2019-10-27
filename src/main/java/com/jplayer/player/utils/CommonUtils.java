@@ -114,7 +114,8 @@ public class CommonUtils {
                                         chapterFile.setPlayUrl(fileDir.getAbsolutePath() + File.separator + "jiaoan.pdf");
                                     }else{
                                         chapterFile.setType(FileType.IMG);
-                                        chapterFile.setPlayUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "voice_play_bg.jpg");
+                                        chapterFile.setBgUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "voice_play_bg.jpg");
+                                        chapterFile.setPlayUrl(VIDEO_PREX  + fileDir.getAbsolutePath() + File.separator + "voice.mp3");
                                         chapterFile.setThumbUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "voice_img.jpg");
                                     }
                                     chapterFiles.add(chapterFile);

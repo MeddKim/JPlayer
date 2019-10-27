@@ -13,5 +13,9 @@ public class ChapterFile {
     private String fileName;
     private String thumbUrl;
     private String playUrl;
+    /**
+     * only music file need bgUrl
+     */
+    private String bgUrl;
     private FileType type;
 }

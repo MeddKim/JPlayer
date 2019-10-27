@@ -30,7 +30,6 @@ public class MusicPlayer extends BorderPane {
      */
     private HBox controlBox;
     private Button playBtn;
-    private Button maxBtn;
     private Button volumeBtn;
     private Label timeLb;
     private Slider processSd;
@@ -61,7 +60,6 @@ public class MusicPlayer extends BorderPane {
     private String stopIconPath = getClass().getResource("/images/media/stop_btn.png").toString();
     private String voiceIconPath = getClass().getResource("/images/media/voice_btn.png").toString();
     private String muteIconPath = getClass().getResource("/images/media/mute_btn.png").toString();
-    private String maxIconPath = getClass().getResource("/images/media/max_btn.png").toString();
 
 
 
@@ -71,12 +69,16 @@ public class MusicPlayer extends BorderPane {
      */
     private String url;
     private MediaView mediaView;
+
+    private ImageView mainImageView;
     private MediaPlayer mediaPlayer;
     private Media media;
     /**
      * 窗口弹出方式
      */
-    private boolean popup;
+    private Boolean popup;
+
+    private Boolean hasMedia;
 
     /**
      * 记录视频是否重复播放
@@ -157,8 +159,6 @@ public class MusicPlayer extends BorderPane {
         setIcon(this.playBtn,this.playIconPath,defaultBtnSize);
         this.volumeBtn = new Button();
         setIcon(this.volumeBtn,this.voiceIconPath,defaultBtnSize);
-        this.maxBtn = new Button();
-        setIcon(this.maxBtn,this.maxIconPath,defaultBtnSize);
 
         this.processSd = new Slider();
         this.processSd.setMaxWidth(processSliderWidth);
@@ -171,7 +171,7 @@ public class MusicPlayer extends BorderPane {
         this.volumeSd = new Slider();
         this.volumeSd.setMaxWidth(voiceSliderWidth);
         this.volumeSd.setMinWidth(voiceSliderWidth);
-        this.controlBox.getChildren().addAll(this.playBtn,this.processSd,this.timeLb,this.volumeBtn,this.volumeSd,this.maxBtn);
+        this.controlBox.getChildren().addAll(this.playBtn,this.processSd,this.timeLb,this.volumeBtn,this.volumeSd);
         this.controlBox.setAlignment(Pos.CENTER);
 
         this.setBottom(this.controlBox);
@@ -179,28 +179,15 @@ public class MusicPlayer extends BorderPane {
 
     private void initMediaView(){
         this.mediaView = new MediaView();
-        this.mediaView.setFitHeight(this.height);
-        this.mediaView.setFitWidth(this.width);
-        this.setCenter(this.mediaView);
+        this.mainImageView = new ImageView();
+        this.mainImageView.setFitWidth(this.width);
+        this.mainImageView.setFitHeight(this.height);
+        this.setCenter(this.mainImageView);
     }
 
 
-    private void printLayout(){
-        System.out.println("整体高度：" + this.getHeight());
 
-        System.out.println("box高度：" + this.controlBox.getHeight());
-        System.out.println("图片高度：" + ((ImageView)this.maxBtn.getGraphic()).getFitHeight());
-        System.out.println("按钮高度：" + this.maxBtn.getHeight());
-
-        System.out.println("--------------------------------------------");
-        System.out.println("整体宽度" + this.getWidth());
-        System.out.println("box宽度：" + this.controlBox.getWidth());
-        System.out.println("图片宽度：" + ((ImageView)this.maxBtn.getGraphic()).getFitWidth());
-        System.out.println("按钮宽度：" + this.maxBtn.getWidth());
-    }
-
-
-    public void start(String url,Boolean popup){
+    public void start(String url,String bgUrl,Boolean popup){
         this.url = url;
         this.popup = popup;
 
@@ -209,6 +196,7 @@ public class MusicPlayer extends BorderPane {
         this.mediaPlayer = new MediaPlayer(media);
         this.mediaView.setMediaPlayer(mediaPlayer);
 
+        this.mainImageView.setImage(new Image(bgUrl));
         //设置播放器，在媒体资源加载完毕后，获取相应的数据，设置组件自适应布局
         setMediaPlayer(this.width,this.height);
     }

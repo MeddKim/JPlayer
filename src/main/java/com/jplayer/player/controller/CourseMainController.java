@@ -5,6 +5,7 @@ import com.jplayer.MainLauncher;
 import com.jplayer.player.component.imgslider.ImageEventListener;
 import com.jplayer.player.component.imgslider.ImageSlider;
 import com.jplayer.player.component.imgslider.SliderEvent;
+import com.jplayer.player.component.media.MusicPlayer;
 import com.jplayer.player.component.media.ProtoMediaPlayer;
 import com.jplayer.player.component.pdf.PdfReaderPane;
 import com.jplayer.player.domain.ChapterFile;
@@ -62,6 +63,8 @@ public class CourseMainController implements ImageEventListener {
     private int defaultChapter = 0;
 
     private ProtoMediaPlayer mediaPlayer;
+
+    private MusicPlayer musicPlayer;
 
     private PdfReaderPane pdfReader;
 
@@ -189,6 +192,7 @@ public class CourseMainController implements ImageEventListener {
         slider.addListener(this);
         slider.initImages(imageDatas);
         BorderPane.setAlignment(slider, Pos.TOP_CENTER);
+        BorderPane.setMargin(slider,new Insets(20,0,100,0));
         this.containerPane.setBottom(slider);
     }
 
@@ -214,17 +218,32 @@ public class CourseMainController implements ImageEventListener {
     }
 
     private void setImageViewToContainer(ChapterFile chapterFile){
-        Image image = new Image(chapterFile.getPlayUrl());
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(this.mediaWidth);
-        imageView.setFitHeight(this.mediaHeight);
-        this.containerPane.setCenter(imageView);
+//        Image image = new Image(chapterFile.getPlayUrl());
+//        ImageView imageView = new ImageView(image);
+//        imageView.setFitWidth(this.mediaWidth);
+//        imageView.setFitHeight(this.mediaHeight);
+//        this.containerPane.setCenter(imageView);
+//        MusicPlayer musicPlayer = new MusicPlayer(this.mediaWidth,this.mediaHeight);
+//        musicPlayer.start(chapterFile.getPlayUrl(),chapterFile.getBgUrl(),false);
+//        this.containerPane.setCenter(musicPlayer);
+//        BorderPane.setAlignment(musicPlayer,Pos.BOTTOM_CENTER);
+
+        try {
+            URL url = new URL(chapterFile.getPlayUrl());
+            this.musicPlayer = new MusicPlayer(this.mediaWidth,this.mediaHeight);
+            musicPlayer.start(url.toString(),chapterFile.getBgUrl(),false);
+            this.containerPane.setCenter(this.musicPlayer);
+            BorderPane.setAlignment(this.musicPlayer,Pos.BOTTOM_CENTER);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setPdfToContainer(ChapterFile chapterFile){
         this.pdfReader = new PdfReaderPane(960,800);
         this.pdfReader.loadPdfDocument(chapterFile.getPlayUrl());
         this.containerPane.setCenter(this.pdfReader);
+        BorderPane.setAlignment(this.pdfReader,Pos.BOTTOM_CENTER);
     }
 
     private void setVideoToContainer(ChapterFile chapterFile){
@@ -233,6 +252,7 @@ public class CourseMainController implements ImageEventListener {
             this.mediaPlayer = new ProtoMediaPlayer(this.mediaWidth,this.mediaHeight);
             this.mediaPlayer.start(url.toString(),false);
             this.containerPane.setCenter(this.mediaPlayer);
+            BorderPane.setAlignment(this.mediaPlayer,Pos.BOTTOM_CENTER);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -273,6 +293,10 @@ public class CourseMainController implements ImageEventListener {
      * 用于chapter切换时清空原有组件数据
      */
     private void destroy(){
+        if(this.musicPlayer != null){
+            this.musicPlayer.destroy();
+            this.musicPlayer = null;
+        }
         if(this.mediaPlayer != null){
             this.mediaPlayer.destroy();
             this.mediaPlayer = null;

@@ -5,6 +5,7 @@ package com.jplayer;
  * @date 2019/9/29
  */
 
+import com.jplayer.player.component.media.MusicPlayer;
 import com.jplayer.player.component.media.ProtoMediaPlayer;
 import com.jplayer.player.component.pdf.PdfReaderPane;
 import com.jplayer.player.component.simple.SimpleMediaPlayer;
@@ -42,9 +43,10 @@ public class MainTest extends Application {
         //创建测试窗口
         primaryStage.setTitle("Test Meida");
         BorderPane mainPane = new BorderPane();
-        ProtoMediaPlayer pane = new ProtoMediaPlayer(960,540);
-        URL url = new URL("file:/E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)\\1.导入\\0.导入视频\\play.mp4");
-        pane.start(url.toString(),false);
+        MusicPlayer pane = new MusicPlayer(960,540);
+        URL url = new URL("file:/D:\\dev\\app\\javaWorkspace\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)\\2.教学\\0.图片\\voice.mp3");
+        String bg = "file:D:\\dev\\app\\javaWorkspace\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)\\2.教学\\0.图片\\voice_play_bg.jpg";
+        pane.start(url.toString(),bg,false);
         mainPane.setCenter(pane);
         BorderPane.setAlignment(pane,Pos.CENTER);
         primaryStage.setScene(new Scene(mainPane, 1000, 800));

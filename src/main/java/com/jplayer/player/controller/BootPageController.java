@@ -33,8 +33,6 @@ public class BootPageController {
     public static ModuleSelectController moduleSelectController;
     public static BootPageSelectController bootPageSelectController;
 
-//    public static ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(5,new BasicThreadFactory.Builder().namingPattern("Wait-Pool" + "-thread-%d").daemon(true).build());
-
     private ScheduledExecutorService executorService;
 
     private Scene scene;

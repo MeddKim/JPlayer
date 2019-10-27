@@ -89,6 +89,9 @@ public class SimpleMediaPlayer extends AnchorPane {
     }
 
     //弹窗式调用：默认大小800*600
+    public static SimpleMediaPlayer popup(String mediaUrl,double width,double height){
+        return popup(mediaUrl, (int) width,(int)height);
+    }
     public static SimpleMediaPlayer popup(String mediaUrl){
         return popup(mediaUrl, (int) MainLauncher.screenWidth,(int)MainLauncher.screenHeight);
     }
@@ -101,6 +104,7 @@ public class SimpleMediaPlayer extends AnchorPane {
         Stage primaryStage = new Stage();
         primaryStage.setTitle("Media Player");
         primaryStage.setScene(scene);
+        primaryStage.setAlwaysOnTop(true);
 
         //检测弹出窗口关闭事件，手动销毁simpleMediaPlayer对象；
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>(){

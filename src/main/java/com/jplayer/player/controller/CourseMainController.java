@@ -65,10 +65,14 @@ public class CourseMainController implements ImageEventListener {
 
     private PdfReaderPane pdfReader;
 
-
     private String currentPath;
     private String prePath;
 
+    private String nextCourse = getClass().getResource("/images/course/next-course.png").toString();
+    private String preCourse = getClass().getResource("/images/course/pre-course.png").toString();
+
+    private Button nextCourseBtn = new Button();
+    private Button preCourseBtn = new Button();
 
     /**
      * 各种组件大小
@@ -93,6 +97,7 @@ public class CourseMainController implements ImageEventListener {
 
     public void initialize() {
         calLayout();
+        initCourseBtn();
         initComponent();
         DropShadow dropshadow = new DropShadow();// 阴影向外
         dropshadow.setRadius(10);// 颜色蔓延的距离
@@ -105,6 +110,14 @@ public class CourseMainController implements ImageEventListener {
         this.containerPane.setBackground(Background.EMPTY);
         this.chapterBtns = Lists.newArrayList();
     }
+
+    private void initCourseBtn(){
+        ImageView next = new ImageView(new Image(nextCourse));
+        ImageView pre = new ImageView(new Image(preCourse));
+        this.nextCourseBtn.setGraphic(next);
+        this.preCourseBtn.setGraphic(pre);
+    }
+
 
     private void calLayout(){
         if(ScreenScaleEnum.W_16_9_2560.getAppWidth() == MainLauncher.globalAppWidth){

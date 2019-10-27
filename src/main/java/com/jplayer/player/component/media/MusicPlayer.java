@@ -1,12 +1,9 @@
 package com.jplayer.player.component.media;
 
-import com.jplayer.MainLauncher;
-import com.jplayer.player.component.simple.SimpleMediaPlayer;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,15 +17,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 /**
  * @author Willard
  * @date 2019/9/26
  */
-public class ProtoMediaPlayer extends BorderPane {
+public class MusicPlayer extends BorderPane {
 
     /**
      * 控制按钮box
@@ -81,7 +76,7 @@ public class ProtoMediaPlayer extends BorderPane {
     /**
      * 窗口弹出方式
      */
-    private Boolean popup;
+    private boolean popup;
 
     /**
      * 记录视频是否重复播放
@@ -107,7 +102,7 @@ public class ProtoMediaPlayer extends BorderPane {
      * @param width 视频宽
      * @param height 视频高
      */
-    public ProtoMediaPlayer(double width,double height){
+    public MusicPlayer(double width, double height){
         this.width = width;
         this.height = height;
         this.setMaxWidth(calPaneWidth(width));
@@ -122,7 +117,6 @@ public class ProtoMediaPlayer extends BorderPane {
         setProcessSlider();
         setVolumeButton();
         setVolumeSd();
-        setFullScreenBtn();
 
     }
     double calPaneHeight(double height){
@@ -420,36 +414,5 @@ public class ProtoMediaPlayer extends BorderPane {
                 mediaPlayer.setVolume(newValue.doubleValue()/100);
             }
         });
-    }
-
-    private void setFullScreenBtn(){
-        this.maxBtn.setOnAction((ActionEvent e)->{
-            if(this.popup.equals(true)){
-                return;
-            }
-            mediaPlayer.pause();
-            popup(url);
-        });
-    }
-    private void popup(String url){
-        ProtoMediaPlayer protoMediaPlayer = new ProtoMediaPlayer(MainLauncher.globalAppWidth,MainLauncher.globalAppHeight - 80);
-        protoMediaPlayer.start(url,true);
-        Scene scene = new Scene(protoMediaPlayer,width,height);
-        Stage primaryStage = new Stage();
-        primaryStage.setTitle("Media Player");
-        primaryStage.setScene(scene);
-//        primaryStage.setMaximized(true);
-        primaryStage.setResizable(false);
-        primaryStage.setHeight(MainLauncher.globalAppHeight);
-        primaryStage.setWidth(MainLauncher.globalAppWidth);
-
-        //检测弹出窗口关闭事件，手动销毁simpleMediaPlayer对象；
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>(){
-            @Override
-            public void handle(WindowEvent event) {
-                protoMediaPlayer.destroy();
-            }
-        });
-        primaryStage.show();
     }
 }

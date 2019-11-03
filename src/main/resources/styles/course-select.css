@@ -1,6 +1,6 @@
 
 .main-pane{
-    -fx-background-image: url("../images/global_bg.png");
+    -fx-background-image: url("../images/course_bg.png");
 }
 .theme-box{
     -fx-padding: 100,20,100,20;

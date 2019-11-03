@@ -1,13 +1,13 @@
 .main-pane{
-    -fx-background-image: url("../images/global_bg.png");
+    -fx-background-image: url("../images/course_main_bg.png");
 }
 
-.container-pane{
-    -fx-background-color: #DEDEDE;
-    /*-fx-opacity: 0.1;*/
-    /*-fx-background-color: rgba(23,200,230,0);*/
-    -fx-background-insets: 0;
-}
+/*.container-pane{*/
+/*    -fx-background-color: #DEDEDE;*/
+/*    !*-fx-opacity: 0.1;*!*/
+/*    !*-fx-background-color: rgba(23,200,230,0);*!*/
+/*    -fx-background-insets: 0;*/
+/*}*/
 
 .home_btn{
     -fx-graphic: url("../images/home.png");

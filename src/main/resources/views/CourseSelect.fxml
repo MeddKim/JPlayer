@@ -12,6 +12,9 @@
 
    </center>
    <bottom>
-      <Button mnemonicParsing="false" onAction="#closeSystem" styleClass="exit_btn" BorderPane.alignment="CENTER_RIGHT" />
+       <HBox alignment="CENTER" spacing="180">
+           <Button mnemonicParsing="false" onAction="#closeSystem" styleClass="exit_btn" />
+           <Button mnemonicParsing="false" onAction="#returnModuleSelect" styleClass="return_btn" />
+       </HBox>
    </bottom>
 </BorderPane>

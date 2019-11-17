@@ -1,0 +1,26 @@
+.switch-pre{
+    -fx-graphic: url("../images/switch_left.png");
+    -fx-background-color:transparent;
+    /*-fx-opacity: 0;*/
+    -fx-end-margin: 100,100,100,0;
+}
+.switch-next{
+    -fx-graphic: url("../images/switch_right.png");
+    -fx-background-color:transparent;
+    /*-fx-opacity: 0;*/
+    -fx-end-margin: 100,100,100,0;
+}
+
+.switch-next-hover{
+    -fx-graphic: url("../images/switch_right.png");
+    -fx-background-color:transparent;
+    -fx-opacity: 0;
+    -fx-end-margin: 100,100,100,0;
+}
+
+.switch-pre-hover{
+    -fx-graphic: url("../images/switch_left.png");
+    -fx-background-color:transparent;
+    -fx-opacity: 0;
+    -fx-end-margin: 100,100,100,0;
+}

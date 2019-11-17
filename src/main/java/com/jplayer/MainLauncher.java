@@ -2,9 +2,7 @@ package com.jplayer;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import com.jplayer.player.controller.BootPageController;
-import com.jplayer.player.controller.ModuleSelectController;
-import com.jplayer.player.controller.WaitCallable;
+import com.jplayer.player.controller.*;
 import com.jplayer.player.enums.ScreenScaleEnum;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -55,8 +53,12 @@ public class MainLauncher extends Application {
     public static String bootImgPath;
     public static String bootImg;
     public static String bootSlogan;
+    public static String mainPageSlogan;
 
     public static List<String> globalMd5List = Lists.newArrayList();
+
+
+    public static FullScreenImageViewController fullScreenImageViewController;
 
 //    @Override
 //    public void start(Stage primaryStage) throws Exception {
@@ -107,7 +109,7 @@ public class MainLauncher extends Application {
         //取消所有默认设置（最大最小化，logo image等等）
         primaryStage.initStyle(StageStyle.UNDECORATED);
         //设置任务栏logo
-        primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResource("images/plug.png").toString()));
+        primaryStage.getIcons().add(new Image(getClass().getClassLoader().getResource("images/plug.gif").toString()));
         primaryStage.setScene(mainScene);
         primaryStage.show();
         primaryStage.setOnCloseRequest(e -> Platform.exit());
@@ -176,6 +178,7 @@ public class MainLauncher extends Application {
             bootImgPath = props.getProperty("bootImgPath",System.getProperty("user.dir") + File.separator + "bg");
             bootImg = props.getProperty("bootImg","1");
             bootSlogan = props.getProperty("bootSlogan","柱石计划跆拳道馆");
+            mainPageSlogan = props.getProperty("mainPageSlogan","不辜负每一张笑脸");
         }catch (Exception e){
             log.error("加载配置文件错误",e);
         }finally {

@@ -1,10 +1,19 @@
 package com.jplayer.player.component.media;
 
+import com.alibaba.fastjson.JSON;
+import com.jplayer.MainLauncher;
+import com.jplayer.MainTest;
+import com.jplayer.player.domain.ChapterFile;
+import com.jplayer.player.domain.ChapterInfo;
+import com.jplayer.player.utils.CommonUtils;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,15 +23,24 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * @author Willard
  * @date 2019/9/26
  */
+@Slf4j
 public class MusicPlayer extends BorderPane {
 
     /**
@@ -34,10 +52,12 @@ public class MusicPlayer extends BorderPane {
     private Label timeLb;
     private Slider processSd;
     private Slider volumeSd;
+    private Button maxBtn;
 
     private double width;
     private double height;
 
+    private Boolean isMP3 = false;
     /**
      * 内容区域整体padding
      */
@@ -60,7 +80,7 @@ public class MusicPlayer extends BorderPane {
     private String stopIconPath = getClass().getResource("/images/media/stop_btn.png").toString();
     private String voiceIconPath = getClass().getResource("/images/media/voice_btn.png").toString();
     private String muteIconPath = getClass().getResource("/images/media/mute_btn.png").toString();
-
+    private String maxIconPath = getClass().getResource("/images/media/max_btn.png").toString();
 
 
 
@@ -73,12 +93,6 @@ public class MusicPlayer extends BorderPane {
     private ImageView mainImageView;
     private MediaPlayer mediaPlayer;
     private Media media;
-    /**
-     * 窗口弹出方式
-     */
-    private Boolean popup;
-
-    private Boolean hasMedia;
 
     /**
      * 记录视频是否重复播放
@@ -100,6 +114,15 @@ public class MusicPlayer extends BorderPane {
 
     private Scene scene;
 
+
+    /**
+     * 记录当前文件信息
+     */
+    private ChapterInfo chapterInfo;
+    private ChapterFile chapterFile;
+
+    private Boolean isFullScreen;
+
     /**
      * @param width 视频宽
      * @param height 视频高
@@ -119,7 +142,8 @@ public class MusicPlayer extends BorderPane {
         setProcessSlider();
         setVolumeButton();
         setVolumeSd();
-
+        //设置最大化
+        setMaxScreen();
     }
     double calPaneHeight(double height){
         double mainHeight = height + this.defaultBtnSize + this.globalPadding * 2 + this.defaultBtnHPadding * 2;
@@ -159,6 +183,8 @@ public class MusicPlayer extends BorderPane {
         setIcon(this.playBtn,this.playIconPath,defaultBtnSize);
         this.volumeBtn = new Button();
         setIcon(this.volumeBtn,this.voiceIconPath,defaultBtnSize);
+        this.maxBtn = new Button();
+        setIcon(this.maxBtn,this.maxIconPath,defaultBtnSize);
 
         this.processSd = new Slider();
         this.processSd.setMaxWidth(processSliderWidth);
@@ -171,10 +197,6 @@ public class MusicPlayer extends BorderPane {
         this.volumeSd = new Slider();
         this.volumeSd.setMaxWidth(voiceSliderWidth);
         this.volumeSd.setMinWidth(voiceSliderWidth);
-        this.controlBox.getChildren().addAll(this.playBtn,this.processSd,this.timeLb,this.volumeBtn,this.volumeSd);
-        this.controlBox.setAlignment(Pos.CENTER);
-
-        this.setBottom(this.controlBox);
     }
 
     private void initMediaView(){
@@ -187,14 +209,22 @@ public class MusicPlayer extends BorderPane {
 
 
 
-    public void start(String url,String bgUrl,Boolean popup){
+    public void start(String url,String bgUrl,Boolean isFullScreen){
         this.url = url;
-        this.popup = popup;
-
-        //MediaView设置
-        this.media = new Media(url);
-        this.mediaPlayer = new MediaPlayer(media);
-        this.mediaView.setMediaPlayer(mediaPlayer);
+        this.isFullScreen = isFullScreen;
+        File file = new File(url);
+        if(file.exists()){
+            try {
+                //MediaView设置
+                URL urlObj = new URL(CommonUtils.VIDEO_PREX + url);
+                this.media = new Media(urlObj.toString());
+                this.mediaPlayer = new MediaPlayer(media);
+                this.mediaView.setMediaPlayer(mediaPlayer);
+                this.isMP3 = true;
+            } catch (Exception e){
+                log.error("初始化音频文件失败 ",e);
+            }
+        }
 
         this.mainImageView.setImage(new Image(bgUrl));
         //设置播放器，在媒体资源加载完毕后，获取相应的数据，设置组件自适应布局
@@ -207,6 +237,16 @@ public class MusicPlayer extends BorderPane {
      * @param height
      */
     void setMediaPlayer(double width,double height){
+        if(this.isMP3){
+            this.controlBox.getChildren().addAll(this.playBtn,this.processSd,this.timeLb,this.volumeBtn,this.volumeSd,this.maxBtn);
+            this.controlBox.setAlignment(Pos.CENTER);
+            this.setBottom(this.controlBox);
+        }else {
+            this.controlBox.getChildren().addAll(this.maxBtn);
+            this.controlBox.setAlignment(Pos.BOTTOM_RIGHT);
+            this.setBottom(this.controlBox);
+            return;
+        }
         mediaPlayer.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
         //视频就绪时更新 进度条 、时间标签、音量条数据,设置布局尺寸
         mediaPlayer.setOnReady(new Runnable(){
@@ -402,5 +442,51 @@ public class MusicPlayer extends BorderPane {
                 mediaPlayer.setVolume(newValue.doubleValue()/100);
             }
         });
+    }
+
+    private void setMaxScreen(){
+        this.maxBtn.setOnMouseClicked(e->{
+            if(this.isFullScreen){
+                return;
+            }
+            log.info(JSON.toJSONString(this.chapterFile));
+            log.info(JSON.toJSONString(this.chapterInfo));
+            try {
+                showFullScreen();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+    }
+
+    private void showFullScreen() throws IOException {
+        Stage primaryStage = new Stage();
+        primaryStage.setTitle("");
+        FXMLLoader fxmlLoader = new FXMLLoader(MainTest.class.getResource("/views/FullScreenImageView.fxml"));
+        Parent root = (Pane) fxmlLoader.load();
+        MainLauncher.fullScreenImageViewController = fxmlLoader.getController();
+        MainLauncher.fullScreenImageViewController.initialize(this.chapterInfo,this.chapterFile);
+        primaryStage.setMaximized(true);
+        primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image(MainTest.class.getClassLoader().getResource("images/plug.gif").toString()));
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+
+        //检测弹出窗口关闭事件，手动销毁simpleMediaPlayer对象；
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>(){
+            @Override
+            public void handle(WindowEvent event) {
+                MainLauncher.fullScreenImageViewController.destroy();
+            }
+        });
+        primaryStage.show();
+    }
+
+    public void setChapterInfo(ChapterInfo chapterInfo){
+        this.chapterInfo = chapterInfo;
+    }
+
+    public void setChapterFile(ChapterFile chapterFile){
+        this.chapterFile = chapterFile;
     }
 }

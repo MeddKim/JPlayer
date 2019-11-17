@@ -1,9 +1,10 @@
 .main-pane{
     -fx-background-color: #FFFFFF;
+    -fx-border-color: #E4E4E4;
 }
 
 .control-box{
-    -fx-background-color: #F2F2F2;
+    -fx-background-color: #E4E4E4;
 }
 
 .button{

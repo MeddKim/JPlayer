@@ -3,11 +3,11 @@ package com.jplayer.player.controller;
 import com.google.common.collect.Lists;
 import com.jplayer.MainLauncher;
 import com.jplayer.player.component.imgslider.ImageEventListener;
-import com.jplayer.player.component.imgslider.ImageSlider;
+import com.jplayer.player.component.imgslider.MainPageImageSlider;
 import com.jplayer.player.component.imgslider.SliderEvent;
 import com.jplayer.player.component.media.MusicPlayer;
 import com.jplayer.player.component.media.ProtoMediaPlayer;
-import com.jplayer.player.component.pdf.PdfReaderPane;
+import com.jplayer.player.component.pdf.PdfBorderPane;
 import com.jplayer.player.domain.ChapterFile;
 import com.jplayer.player.domain.ChapterInfo;
 import com.jplayer.player.enums.ChapterBtnEnum;
@@ -21,14 +21,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.effect.DropShadow;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -38,8 +36,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jplayer.MainLauncher.screenHeight;
-import static com.jplayer.MainLauncher.screenWidth;
+import static com.jplayer.MainLauncher.globalAppHeight;
+import static com.jplayer.MainLauncher.globalAppWidth;
 
 /**
  * @author Willard
@@ -57,6 +55,8 @@ public class CourseMainController implements ImageEventListener {
     private VBox chapterBox;
     @FXML
     private BorderPane containerPane;
+    @FXML
+    private Label bgSloganLabel;
 
     List<Button> chapterBtns;
 
@@ -66,7 +66,7 @@ public class CourseMainController implements ImageEventListener {
 
     private MusicPlayer musicPlayer;
 
-    private PdfReaderPane pdfReader;
+    private PdfBorderPane pdfReader;
 
     private String currentPath;
     private String prePath;
@@ -82,24 +82,16 @@ public class CourseMainController implements ImageEventListener {
     private double mediaWidth = 800;
     private double mediaHeight = 450;
 
-    private double pdfReaderWidth;
-    private double pdfReaderHeight;
+    private ArrayList<ChapterInfo> chapterInfos;
 
+    private ChapterInfo currentChapterInfo;
 
     public void initialize() {
         calLayout();
         initCourseBtn();
         initComponent();
-//        DropShadow dropshadow = new DropShadow();// 阴影向外
-//        dropshadow.setRadius(10);// 颜色蔓延的距离
-//        dropshadow.setOffsetX(0);// 水平方向，0则向左右两侧，正则向右，负则向左
-//        dropshadow.setOffsetY(0);// 垂直方向，0则向上下两侧，正则向下，负则向上
-//        dropshadow.setSpread(0.1);// 颜色变淡的程度
-//        dropshadow.setColor(Color.BLACK);// 设置颜色
-//        this.containerPane.setEffect(dropshadow);
-//        this.mainPane.setEffect(dropshadow);
-//        this.containerPane.setBackground(Background.EMPTY);
         this.chapterBtns = Lists.newArrayList();
+        this.bgSloganLabel.setText(MainLauncher.mainPageSlogan);
     }
 
     private void initCourseBtn(){
@@ -115,8 +107,10 @@ public class CourseMainController implements ImageEventListener {
             this.mediaWidth = ScreenScaleEnum.W_16_9_1366.getAppWidth();
             this.mediaHeight = ScreenScaleEnum.W_16_9_1366.getAppHeight();
         }else if(ScreenScaleEnum.W_16_9_1366.getAppWidth() == MainLauncher.globalAppWidth || ScreenScaleEnum.W_16_9_1920.getAppWidth() == MainLauncher.globalAppWidth){
-            this.mediaWidth = ScreenScaleEnum.W_16_9_960.getAppWidth();
-            this.mediaHeight = ScreenScaleEnum.W_16_9_960.getAppHeight();
+//            this.mediaWidth = ScreenScaleEnum.W_16_9_960.getAppWidth();
+//            this.mediaHeight = ScreenScaleEnum.W_16_9_960.getAppHeight();
+            this.mediaWidth = 1120;
+            this.mediaHeight = 630;
         }
     }
 
@@ -132,8 +126,8 @@ public class CourseMainController implements ImageEventListener {
     public void initChapterInfo(String coursePath,String prePath){
         this.currentPath = coursePath;
         this.prePath = prePath;
-        ArrayList<ChapterInfo> chapterInfos = CommonUtils.getChapterInfo(coursePath);
-        initChapterBtn(chapterInfos);
+        this.chapterInfos = CommonUtils.getChapterInfo(coursePath);
+        initChapterBtn(this.chapterInfos);
     }
 
     /**
@@ -151,6 +145,7 @@ public class CourseMainController implements ImageEventListener {
                 chapterInfo.setIsSelected(true);
                 button.getStyleClass().add(chapterInfo.getChapterType().getBtnStyle() + "-selected");
                 setImageSlider(chapterInfo);
+                this.currentChapterInfo = chapterInfo;
             }
             button.setOnMouseClicked(e->{
                 Button btn = (Button)e.getSource();
@@ -172,12 +167,13 @@ public class CourseMainController implements ImageEventListener {
         VBox.setMargin(this.preCourseBtn,new Insets(0,0,0,-35));
         VBox.setMargin(this.nextCourseBtn,new Insets(0,0,0,-35));
         setContainer(chapterInfos.get(0).getChapterFiles().get(0));
-
     }
 
     private void setImageSlider(ChapterInfo chapterInfo){
         this.containerPane.setBottom(null);
-        if(ChapterBtnEnum.LESSON_PLAN.equals(chapterInfo.getChapterType()) || CollectionUtils.isEmpty(chapterInfo.getChapterFiles())){
+        if(ChapterBtnEnum.LESSON_PLAN.equals(chapterInfo.getChapterType())
+                || ChapterBtnEnum.FAMILY.equals(chapterInfo.getChapterType())
+                || CollectionUtils.isEmpty(chapterInfo.getChapterFiles())){
             return;
         }
         List<SliderEvent> imageDatas = Lists.newArrayList();
@@ -187,7 +183,7 @@ public class CourseMainController implements ImageEventListener {
             itemData.setImagePath(chapterFile.getThumbUrl());
             imageDatas.add(itemData);
         }
-        ImageSlider slider = new ImageSlider(this.mediaWidth);
+        MainPageImageSlider slider = new MainPageImageSlider(this.mediaWidth,true);
         slider.addListener(this);
         slider.initImages(imageDatas);
         BorderPane.setAlignment(slider, Pos.TOP_CENTER);
@@ -217,29 +213,16 @@ public class CourseMainController implements ImageEventListener {
     }
 
     private void setImageViewToContainer(ChapterFile chapterFile){
-//        Image image = new Image(chapterFile.getPlayUrl());
-//        ImageView imageView = new ImageView(image);
-//        imageView.setFitWidth(this.mediaWidth);
-//        imageView.setFitHeight(this.mediaHeight);
-//        this.containerPane.setCenter(imageView);
-//        MusicPlayer musicPlayer = new MusicPlayer(this.mediaWidth,this.mediaHeight);
-//        musicPlayer.start(chapterFile.getPlayUrl(),chapterFile.getBgUrl(),false);
-//        this.containerPane.setCenter(musicPlayer);
-//        BorderPane.setAlignment(musicPlayer,Pos.BOTTOM_CENTER);
-
-        try {
-            URL url = new URL(chapterFile.getPlayUrl());
             this.musicPlayer = new MusicPlayer(this.mediaWidth,this.mediaHeight);
-            musicPlayer.start(url.toString(),chapterFile.getBgUrl(),false);
+            musicPlayer.start(chapterFile.getPlayUrl(),chapterFile.getBgUrl(),false);
+            musicPlayer.setChapterFile(chapterFile);
+            musicPlayer.setChapterInfo(this.currentChapterInfo);
             this.containerPane.setCenter(this.musicPlayer);
             BorderPane.setAlignment(this.musicPlayer,Pos.BOTTOM_CENTER);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
     }
 
     private void setPdfToContainer(ChapterFile chapterFile){
-        this.pdfReader = new PdfReaderPane(960,800);
+        this.pdfReader = new PdfBorderPane(960,800);
         this.pdfReader.loadPdfDocument(chapterFile.getPlayUrl());
         this.containerPane.setCenter(this.pdfReader);
         BorderPane.setAlignment(this.pdfReader,Pos.BOTTOM_CENTER);
@@ -250,6 +233,8 @@ public class CourseMainController implements ImageEventListener {
             URL url = new URL(chapterFile.getPlayUrl());
             this.mediaPlayer = new ProtoMediaPlayer(this.mediaWidth,this.mediaHeight);
             this.mediaPlayer.start(url.toString(),false);
+            this.mediaPlayer.setChapterFile(chapterFile);
+            this.mediaPlayer.setChapterInfo(this.currentChapterInfo);
             this.containerPane.setCenter(this.mediaPlayer);
             BorderPane.setAlignment(this.mediaPlayer,Pos.BOTTOM_CENTER);
         } catch (MalformedURLException e) {
@@ -282,6 +267,7 @@ public class CourseMainController implements ImageEventListener {
             btn.getStyleClass().add(chapter.getChapterType().getBtnStyle());
         }
         chapterInfo.setIsSelected(true);
+        this.currentChapterInfo = chapterInfo;
         button.getStyleClass().clear();
         button.getStyleClass().add(chapterInfo.getChapterType().getBtnStyle() + "-selected");
         setImageSlider(chapterInfo);
@@ -313,6 +299,8 @@ public class CourseMainController implements ImageEventListener {
         setContainer(chapterFile);
     }
 
+
+
     public void returnCourseSelect(){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/CourseSelect.fxml"));
@@ -324,8 +312,8 @@ public class CourseMainController implements ImageEventListener {
                 stage.setScene(scene);
                 stage.setResizable(false);
                 stage.setMaximized(true);
-                stage.setWidth(MainLauncher.globalAppWidth);
-                stage.setHeight(MainLauncher.globalAppWidth);
+                stage.setWidth(globalAppWidth);
+                stage.setHeight(globalAppHeight);
                 con.initCourseInfo(this.prePath);
             });
         }catch (Exception e){

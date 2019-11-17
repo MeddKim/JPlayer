@@ -18,4 +18,6 @@ public class ChapterFile {
      */
     private String bgUrl;
     private FileType type;
+
+    private Boolean isSelected = false;
 }

@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,6 +25,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +62,22 @@ public class CourseSelectController implements ImageEventListener {
         System.exit(0);
     }
 
+    public void returnModuleSelect() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/ModuleSelect.fxml"));
+        Parent root = (Pane) fxmlLoader.load();
+        ModuleSelectController controller = fxmlLoader.<ModuleSelectController>getController();
+        Scene newScene = new Scene(root);
+        Platform.runLater(()-> {
+
+            MainLauncher.primaryStageObj.setScene(newScene);
+            MainLauncher.primaryStageObj.setResizable(false);
+            MainLauncher.primaryStageObj.setMaximized(true);
+            MainLauncher.primaryStageObj.setWidth(MainLauncher.globalAppWidth);
+            MainLauncher.primaryStageObj.setHeight(MainLauncher.globalAppHeight);
+            controller.initModuleInfo(MainLauncher.coursePath);
+        });
+    }
+
     public void initCourseInfo(String modulePath){
         this.currentPath = modulePath;
         calLayout();
@@ -75,6 +93,7 @@ public class CourseSelectController implements ImageEventListener {
      */
     private void initThemeBox(ArrayList<ThemeInfo> themeInfos){
         this.themeBox.getChildren().clear();
+        this.mainPane.setCenter(null);
         ToggleGroup group = new ToggleGroup();
         for(int i = 0;i < themeInfos.size();i++){
             ThemeInfo themeInfo = themeInfos.get(i);
@@ -110,9 +129,11 @@ public class CourseSelectController implements ImageEventListener {
         }
         this.imageSlider = new ImageSlider(this.sliderWidth,true);
         BorderPane.setAlignment(this.imageSlider, Pos.CENTER);
+        BorderPane.setMargin(this.imageSlider,new Insets(-150,0,0,0));
         this.imageSlider.addListener(this);
         this.imageSlider.initImages(imageDatas);
         this.mainPane.setCenter(this.imageSlider);
+
     }
 
     private ToggleButton createThemeBtn(ThemeInfo themeInfo){

@@ -34,8 +34,9 @@ public class MainTest extends Application {
 //        other(primaryStage);
 //        pane(primaryStage);
 //        imageSlider(primaryStage);
-        pdf(primaryStage);
+//        pdf(primaryStage);
 //        bootBg(primaryStage);
+        fullScreen(primaryStage);
     }
 
 
@@ -57,7 +58,8 @@ public class MainTest extends Application {
     }
 
     public static void other(Stage primaryStage) throws Exception{
-        URL url = new URL("file:/E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)\\1.导入\\0.导入视频\\play.mp4");
+//        URL url = new URL("file:/E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)\\1.导入\\0.导入视频\\play.mp4");
+        URL url = new URL("file:/C:/dev/app/JPlayer/course/0.FS未来素养课程/01.欺凌预防/01.识别欺凌(1)/01.导入/05.视频/video.mp4");
         SimpleMediaPlayer player = SimpleMediaPlayer.newInstance(url.toString(),800,600);
         BorderPane.setAlignment(player,Pos.CENTER);
         primaryStage.setScene(new Scene(player, 1000, 800));
@@ -121,6 +123,24 @@ public class MainTest extends Application {
         primaryStage.setScene(mainScene);
         primaryStage.show();
     }
+
+    public static void fullScreen(Stage primaryStage) throws Exception{
+        primaryStage.setTitle("");
+        FXMLLoader fxmlLoader = new FXMLLoader(MainTest.class.getResource("/views/FullScreenImageView.fxml"));
+        Parent root = (Pane) fxmlLoader.load();
+
+
+//        MusicPlayer pane = new MusicPlayer(960,540);
+//        URL url = new URL("file:/D:\\dev\\app\\javaWorkspace\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)\\2.教学\\0.图片\\voice.mp3");
+//        String bg = "file:D:\\dev\\app\\javaWorkspace\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)\\2.教学\\0.图片\\voice_play_bg.jpg";
+//        pane.start(url.toString(),bg,false);
+        primaryStage.setMaximized(true);
+        primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image(MainTest.class.getClassLoader().getResource("images/plug.gif").toString()));
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
         launch(args);
     }

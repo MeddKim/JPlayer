@@ -10,4 +10,5 @@ import lombok.Data;
 public class SliderEvent {
     private String imagePath;
     private Object data;
+    private Boolean isSelected;
 }

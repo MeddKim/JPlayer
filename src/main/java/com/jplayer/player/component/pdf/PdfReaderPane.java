@@ -11,6 +11,7 @@ import org.icepdf.core.pobjects.Page;
 import org.icepdf.core.pobjects.PageTree;
 import org.icepdf.core.util.GraphicsRenderingHints;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class PdfReaderPane extends ScrollPane {
     private double pageHeight = 0.0 ;
 
     private double zoom = 1.5 ;
+
+
+
 
     public PdfReaderPane(double width,double height){
         this.height = height;

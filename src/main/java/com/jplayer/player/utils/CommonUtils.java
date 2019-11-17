@@ -1,15 +1,16 @@
 package com.jplayer.player.utils;
 
-import com.google.common.collect.Lists;
-import com.jplayer.MainLauncher;
 import com.jplayer.player.domain.*;
 import com.jplayer.player.enums.ChapterBtnEnum;
 import com.jplayer.player.enums.FileType;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.UUID;
  * @author Willard
  * @date 2019/9/26
  */
+@Slf4j
 public class CommonUtils {
 
     /**
@@ -29,7 +31,7 @@ public class CommonUtils {
 
     public static final String BG_PREX = "file:";
     public static final String VIDEO_PREX = "file:/";
-    public static final String BG_NAME = "bg.png";
+    public static final String BG_NAME = "lesson.jpg";
 
     public static ArrayList<ModuleInfo> getModuleInfo(String path){
         File root = new File(path);
@@ -42,7 +44,7 @@ public class CommonUtils {
                     moduleInfo.setModuleId(names[0]);
                     moduleInfo.setModuleName(names[1]);
                     moduleInfo.setModulePath(dir.getAbsolutePath());
-                    moduleInfo.setBgUrl(BG_PREX + dir.getAbsolutePath() + File.separator + BG_NAME);
+                    moduleInfo.setBgUrl(BG_PREX + dir.getAbsolutePath() + File.separator + "bg.png");
                     moduleInfos.add(moduleInfo);
                 }
             }
@@ -91,10 +93,10 @@ public class CommonUtils {
     public static ArrayList<ChapterInfo> getChapterInfo(String path,Boolean isCalMd5){
         ArrayList<ChapterInfo> chapterInfos = new ArrayList<>();
         File root = new File(path);
-        String md5Value = calPathMD5(path);
-        if(!isCalMd5 && !MainLauncher.globalMd5List.contains(md5Value)){
-           return Lists.newArrayList();
-        }
+//        String md5Value = calPathMD5(path);
+//        if(!isCalMd5 && !MainLauncher.globalMd5List.contains(md5Value)){
+//           return Lists.newArrayList();
+//        }
         for(File chapterDir: root.listFiles()){
             if(chapterDir.isDirectory()){
                 String[] chapterNames = chapterDir.getName().split(ID_NAME_SPLIT);
@@ -111,6 +113,11 @@ public class CommonUtils {
                         chapterFile.setPlayUrl(chapterDir.getAbsolutePath() + File.separator + "jiaoan.pdf");
                         chapterFile.setType(FileType.PDF);
                         chapterFiles.add(chapterFile);
+                    }else if(ChapterBtnEnum.FAMILY.equals(chapterInfo.getChapterType())){
+                        ChapterFile chapterFile = new ChapterFile();
+                        chapterFile.setPlayUrl(chapterDir.getAbsolutePath() + File.separator + "jiating.pdf");
+                        chapterFile.setType(FileType.PDF);
+                        chapterFiles.add(chapterFile);
                     }else {
                         for(File fileDir : chapterDir.listFiles()){
                             if(fileDir.isDirectory()){
@@ -121,16 +128,16 @@ public class CommonUtils {
                                     chapterFile.setFileName(chapterFileNames[1]);
                                     if(chapterFileNames[1].contains("视频")){
                                         chapterFile.setType(FileType.VEDIO);
-                                        chapterFile.setPlayUrl(VIDEO_PREX + fileDir.getAbsolutePath() + File.separator + "play.mp4");
-                                        chapterFile.setThumbUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator +"thumb.png");
-                                    }else if(chapterFileNames[1].contains("教案")){
+                                        chapterFile.setPlayUrl(VIDEO_PREX + fileDir.getAbsolutePath() + File.separator + "video.mp4");
+                                        chapterFile.setThumbUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator +"s.jpg");
+                                    }else if(chapterFileNames[1].contains("教案") || chapterFileNames[1].contains("家庭")){
                                         chapterFile.setType(FileType.PDF);
                                         chapterFile.setPlayUrl(fileDir.getAbsolutePath() + File.separator + "jiaoan.pdf");
                                     }else{
                                         chapterFile.setType(FileType.IMG);
-                                        chapterFile.setBgUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "voice_play_bg.jpg");
-                                        chapterFile.setPlayUrl(VIDEO_PREX  + fileDir.getAbsolutePath() + File.separator + "voice.mp3");
-                                        chapterFile.setThumbUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "voice_img.jpg");
+                                        chapterFile.setBgUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "m.jpg");
+                                        chapterFile.setPlayUrl(fileDir.getAbsolutePath() + File.separator + "voice.mp3");
+                                        chapterFile.setThumbUrl(BG_PREX + fileDir.getAbsolutePath() + File.separator + "s.jpg");
                                     }
                                     chapterFiles.add(chapterFile);
                                 }
@@ -257,6 +264,32 @@ public class CommonUtils {
         }
     }
 
+    public static void copyFileUsingFileChannels(File source, File dest) {
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        try {
+            inputChannel = new FileInputStream(source).getChannel();
+            outputChannel = new FileOutputStream(dest).getChannel();
+            outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+        }catch (Exception e){
+            log.error("拷贝文件异常");
+        }finally {
+            if(inputChannel != null){
+                try {
+                    inputChannel.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (outputChannel != null){
+                try {
+                    outputChannel.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     public static void main(String[] args) {
 //        ArrayList<ChapterInfo> chapterInfos = getChapterInfo("E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");

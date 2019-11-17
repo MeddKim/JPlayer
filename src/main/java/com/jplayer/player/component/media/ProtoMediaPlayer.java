@@ -1,13 +1,19 @@
 package com.jplayer.player.component.media;
 
 import com.jplayer.MainLauncher;
+import com.jplayer.MainTest;
 import com.jplayer.player.component.simple.SimpleMediaPlayer;
+import com.jplayer.player.domain.ChapterFile;
+import com.jplayer.player.domain.ChapterInfo;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,17 +23,23 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * @author Willard
  * @date 2019/9/26
  */
+@Slf4j
 public class ProtoMediaPlayer extends BorderPane {
 
     /**
@@ -103,6 +115,10 @@ public class ProtoMediaPlayer extends BorderPane {
 
     private Scene scene;
 
+    private ChapterInfo chapterInfo;
+    private ChapterFile chapterFile;
+
+
     /**
      * @param width 视频宽
      * @param height 视频高
@@ -177,6 +193,7 @@ public class ProtoMediaPlayer extends BorderPane {
         this.volumeSd = new Slider();
         this.volumeSd.setMaxWidth(voiceSliderWidth);
         this.volumeSd.setMinWidth(voiceSliderWidth);
+        this.controlBox.setPadding(new Insets(10,0,10,0));
         this.controlBox.getChildren().addAll(this.playBtn,this.processSd,this.timeLb,this.volumeBtn,this.volumeSd,this.maxBtn);
         this.controlBox.setAlignment(Pos.CENTER);
 
@@ -188,6 +205,7 @@ public class ProtoMediaPlayer extends BorderPane {
         this.mediaView.setFitHeight(this.height);
         this.mediaView.setFitWidth(this.width);
         this.setCenter(this.mediaView);
+        BorderPane.setMargin(this.mediaView,new Insets(10,10,0,10));
     }
 
 
@@ -209,11 +227,16 @@ public class ProtoMediaPlayer extends BorderPane {
     public void start(String url,Boolean popup){
         this.url = url;
         this.popup = popup;
+        try {
+            URL urlObj = new URL(this.url);
+            //MediaView设置
+            this.media = new Media(urlObj.toString());
+            this.mediaPlayer = new MediaPlayer(media);
+            this.mediaView.setMediaPlayer(mediaPlayer);
+        }catch (Exception e){
+            log.error("读取URL错误",e);
+        }
 
-        //MediaView设置
-        this.media = new Media(url);
-        this.mediaPlayer = new MediaPlayer(media);
-        this.mediaView.setMediaPlayer(mediaPlayer);
 
         //设置播放器，在媒体资源加载完毕后，获取相应的数据，设置组件自适应布局
         setMediaPlayer(this.width,this.height);
@@ -428,28 +451,40 @@ public class ProtoMediaPlayer extends BorderPane {
                 return;
             }
             mediaPlayer.pause();
-            popup(url);
+            try {
+                popup(url);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         });
     }
-    private void popup(String url){
-        ProtoMediaPlayer protoMediaPlayer = new ProtoMediaPlayer(MainLauncher.globalAppWidth,MainLauncher.globalAppHeight - 80);
-        protoMediaPlayer.start(url,true);
-        Scene scene = new Scene(protoMediaPlayer,width,height);
+    private void popup(String url) throws IOException {
         Stage primaryStage = new Stage();
-        primaryStage.setTitle("Media Player");
-        primaryStage.setScene(scene);
-//        primaryStage.setMaximized(true);
+        primaryStage.setTitle("");
+        FXMLLoader fxmlLoader = new FXMLLoader(MainTest.class.getResource("/views/FullScreenImageView.fxml"));
+        Parent root = (Pane) fxmlLoader.load();
+        MainLauncher.fullScreenImageViewController = fxmlLoader.getController();
+        MainLauncher.fullScreenImageViewController.initialize(this.chapterInfo,this.chapterFile);
+        primaryStage.setMaximized(true);
         primaryStage.setResizable(false);
-        primaryStage.setHeight(MainLauncher.globalAppHeight);
-        primaryStage.setWidth(MainLauncher.globalAppWidth);
+        primaryStage.getIcons().add(new Image(MainTest.class.getClassLoader().getResource("images/plug.gif").toString()));
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
 
         //检测弹出窗口关闭事件，手动销毁simpleMediaPlayer对象；
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>(){
             @Override
             public void handle(WindowEvent event) {
-                protoMediaPlayer.destroy();
+                MainLauncher.fullScreenImageViewController.destroy();
             }
         });
         primaryStage.show();
+    }
+    public void setChapterInfo(ChapterInfo chapterInfo){
+        this.chapterInfo = chapterInfo;
+    }
+
+    public void setChapterFile(ChapterFile chapterFile){
+        this.chapterFile = chapterFile;
     }
 }

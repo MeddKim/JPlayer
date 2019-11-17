@@ -1,6 +1,7 @@
 package com.jplayer.player.component.imgslider;
 
 import com.google.common.collect.Lists;
+import com.jplayer.player.domain.ChapterFile;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -18,7 +19,7 @@ import java.util.List;
  * @date 2019-10-02
  */
 @Slf4j
-public class ImageSlider extends BorderPane {
+public class MainPageImageSlider extends BorderPane {
 
     private Button btnLeft;
     private Button btnRight;
@@ -58,8 +59,11 @@ public class ImageSlider extends BorderPane {
     /**
      * 课程选择页图片的宽高
      */
-    private double courseImageWidth = 270;
-    private double courseImageHeight = 360;
+    private double courseImageWidth = 208;
+    private double courseImageHeight = 117;
+
+    private double selectItemHight = 135;
+    private double selectItemWidth = 240;
 
     private HBox imgBox;
 
@@ -73,13 +77,13 @@ public class ImageSlider extends BorderPane {
     private List<ImageView> imageViews;
 
 
-    public ImageSlider(double width,boolean isCourseSelect){
+    public MainPageImageSlider(double width, boolean isCourseSelect){
         this.componentWidth = width;
         initLayout(width);
         imageSlider();
     }
 
-    public ImageSlider(double width){
+    public MainPageImageSlider(double width){
         super();
         this.componentWidth = width;
         initLayout();
@@ -106,7 +110,7 @@ public class ImageSlider extends BorderPane {
      * @param width  整体宽度
      */
     void initLayout(double width){
-        this.itemSpace = 40;
+        this.itemSpace = 20;
         this.itemBoxWidth = width - this.switchItemSize * 2 - this.switchPadding * 4;
         this.itemNum = (int) Math.floor(this.itemBoxWidth / (this.courseImageWidth + this.itemSpace));
         this.itemWidth = this.courseImageWidth;
@@ -160,20 +164,31 @@ public class ImageSlider extends BorderPane {
 
     public void initImages(List<SliderEvent> itemDatas){
         this.imgBox.setSpacing(this.itemSpace);
-        for(SliderEvent itemData : itemDatas){
+        for(int i=0 ; i < itemDatas.size(); i++){
+            SliderEvent itemData = itemDatas.get(i);
+//        }
+//        for(SliderEvent itemData : itemDatas){
             Image image = new Image(itemData.getImagePath());
             ImageView imageView = new ImageView(image);
+            if( i == 0){
+                imageView.setFitWidth(this.selectItemWidth);
+                imageView.setFitHeight(this.selectItemHight);
+                ChapterFile chapterFile = (ChapterFile) itemData.getData();
+                chapterFile.setIsSelected(true);
+            }else {
+                imageView.setFitWidth(this.itemWidth);
+                imageView.setFitHeight(this.itemHeight);
+            }
             imageView.setUserData(itemData.getData());
-            imageView.setFitWidth(this.itemWidth);
-            imageView.setFitHeight(this.itemHeight);
             imageView.getStyleClass().add("item-image");
-            setImageViewSize(imageView,20);
+            setImageViewSize(imageView);
             imageView.setOnMouseClicked(event -> {
                 ImageView source = (ImageView)event.getSource();
                 this.data = source.getUserData();
                 SliderEvent sliderEvent = new SliderEvent();
                 sliderEvent.setData(source.getUserData());
                 notifyListener(sliderEvent);
+                imageViewClick(source,this.imageViews);
             });
             this.imageViews.add(imageView);
         }
@@ -181,16 +196,38 @@ public class ImageSlider extends BorderPane {
         setControlBtn();
     }
 
-    private void setImageViewSize(ImageView imageView, double size){
+    private void imageViewClick(ImageView imageView,List<ImageView> imageViews){
+
+        for(ImageView view : imageViews){
+            view.setFitWidth(this.courseImageWidth);
+            view.setFitHeight(this.courseImageHeight);
+            ChapterFile file = (ChapterFile)view.getUserData();
+            file.setIsSelected(false);
+        }
+        imageView.setFitWidth(this.selectItemWidth);
+        imageView.setFitHeight(this.selectItemHight);
+        ChapterFile currentFile = (ChapterFile)imageView.getUserData();
+        currentFile.setIsSelected(true);
+    }
+
+    private void setImageViewSize(ImageView imageView){
         imageView.setOnMouseEntered(e->{
             ImageView source = (ImageView)e.getSource();
-            source.setFitHeight(400);
-            source.setFitWidth(300);
+            ChapterFile file = (ChapterFile)source.getUserData();
+            if(file.getIsSelected()){
+                return;
+            }
+            source.setFitHeight(135);
+            source.setFitWidth(240);
         });
         imageView.setOnMouseExited(e->{
             ImageView source = (ImageView)e.getSource();
-            source.setFitHeight(360);
-            source.setFitWidth(270);
+            ChapterFile file = (ChapterFile)source.getUserData();
+            if(file.getIsSelected()){
+                return;
+            }
+            source.setFitHeight(126);
+            source.setFitWidth(224);
         });
     }
 

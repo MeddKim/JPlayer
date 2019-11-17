@@ -1,5 +1,7 @@
 .main-pane{
-    -fx-background-image: url("../images/global_bg.png");
+    -fx-background-image: url("../images/global_bg.jpg");
+    -fx-background-position: center;
+    -fx-background-repeat: none;
 }
 
 .module-box .button{
@@ -12,3 +14,4 @@
     -fx-opacity: 1;
     -fx-end-margin: 100,100,100,0;
 }
+

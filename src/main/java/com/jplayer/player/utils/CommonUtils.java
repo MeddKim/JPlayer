@@ -1,14 +1,13 @@
 package com.jplayer.player.utils;
 
+import com.google.common.base.Strings;
+import com.jplayer.MainLauncher;
 import com.jplayer.player.domain.*;
 import com.jplayer.player.enums.ChapterBtnEnum;
 import com.jplayer.player.enums.FileType;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
@@ -16,6 +15,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.jplayer.MainLauncher.globalMd5List;
 
 /**
  * @author Willard
@@ -32,6 +35,8 @@ public class CommonUtils {
     public static final String BG_PREX = "file:";
     public static final String VIDEO_PREX = "file:/";
     public static final String BG_NAME = "lesson.jpg";
+
+    public static final String SALT = "34mnFedp";
 
     public static ArrayList<ModuleInfo> getModuleInfo(String path){
         File root = new File(path);
@@ -93,10 +98,6 @@ public class CommonUtils {
     public static ArrayList<ChapterInfo> getChapterInfo(String path,Boolean isCalMd5){
         ArrayList<ChapterInfo> chapterInfos = new ArrayList<>();
         File root = new File(path);
-//        String md5Value = calPathMD5(path);
-//        if(!isCalMd5 && !MainLauncher.globalMd5List.contains(md5Value)){
-//           return Lists.newArrayList();
-//        }
         for(File chapterDir: root.listFiles()){
             if(chapterDir.isDirectory()){
                 String[] chapterNames = chapterDir.getName().split(ID_NAME_SPLIT);
@@ -237,7 +238,7 @@ public class CommonUtils {
         return bi.toString(16);
     }
 
-    public static String calPathMD5(String key) {
+    public static String getMD5(String key) {
         char hexDigits[] = {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
         };
@@ -291,6 +292,142 @@ public class CommonUtils {
         }
     }
 
+
+    public static String getMD5(String filePath,String salt){
+        String sourceMd5 = getMd5ByFile(filePath);
+        String targetMd5 = getMD5( salt + sourceMd5 + salt);
+        return targetMd5;
+    }
+
+    public static String getMd5ByFile(String filePath) {
+        log.info("当前加密文件路径：{}",filePath);
+        if(Strings.isNullOrEmpty(filePath)){
+            return null;
+        }
+        if(filePath.startsWith(VIDEO_PREX)){
+            filePath = StringStartTrim(filePath,VIDEO_PREX);
+        }else if(filePath.startsWith(BG_PREX)){
+            filePath = StringStartTrim(filePath,BG_PREX);
+        }
+        File file = new File(filePath);
+        if(!file.exists()){
+            return null;
+        }
+        InputStream fis;
+        byte[] buffer = new byte[2048];
+        int numRead = 0;
+        MessageDigest md5;
+
+        try {
+            fis = new FileInputStream(file);
+            md5 = MessageDigest.getInstance("MD5");
+            while ((numRead = fis.read(buffer)) > 0) {
+                md5.update(buffer, 0, numRead);
+            }
+            fis.close();
+            return md5ToString(md5.digest());
+        } catch (Exception e) {
+            System.out.println("error");
+            return null;
+        }
+    }
+
+
+    public static String StringStartTrim(String stream, String trim) {
+        // null或者空字符串的时候不处理
+        if (stream == null || stream.length() == 0 || trim == null || trim.length() == 0) {
+            return stream;
+        }
+        // 要删除的字符串结束位置
+        int end;
+        // 正规表达式
+        String regPattern = "[" + trim + "]*+";
+        Pattern pattern = Pattern.compile(regPattern, Pattern.CASE_INSENSITIVE);
+        // 去掉原始字符串开头位置的指定字符
+        Matcher matcher = pattern.matcher(stream);
+        if (matcher.lookingAt()) {
+            end = matcher.end();
+            stream = stream.substring(end);
+        }
+        // 返回处理后的字符串
+        return stream;
+    }
+
+
+    public static String md5ToString(byte[] md5Bytes) {
+        StringBuffer hexValue = new StringBuffer();
+        for (int i = 0; i < md5Bytes.length; i++) {
+            int val = ((int) md5Bytes[i]) & 0xff;
+            if (val < 16) {
+                hexValue.append("0");
+            }
+            hexValue.append(Integer.toHexString(val));
+        }
+        return hexValue.toString();
+    }
+
+    public static String getSHA256(String str) {
+        MessageDigest messageDigest;
+        String encodestr = "";
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(str.getBytes("UTF-8"));
+            encodestr = byte2Hex(messageDigest.digest());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return encodestr;
+    }
+
+    /**
+     * 将byte转为16进制
+     *
+     * @param bytes
+     * @return
+     */
+    private static String byte2Hex(byte[] bytes) {
+        StringBuffer stringBuffer = new StringBuffer();
+        String temp = null;
+        for (int i = 0; i < bytes.length; i++) {
+            temp = Integer.toHexString(bytes[i] & 0xFF);
+            if (temp.length() == 1) {
+                // 1得到一位的进行补0操作
+                stringBuffer.append("0");
+            }
+            stringBuffer.append(temp);
+        }
+        return stringBuffer.toString();
+    }
+
+
+    public static Boolean checkMD5(ArrayList<ChapterInfo> chapterInfos){
+        for(ChapterInfo chapterInfo : chapterInfos){
+            for(ChapterFile chapterFile : chapterInfo.getChapterFiles()){
+                if(!Strings.isNullOrEmpty(chapterFile.getBgUrl())){
+                    String md5 = getMD5(chapterFile.getBgUrl(),SALT);
+                    if(!globalMd5List.contains(md5)){
+                        return false;
+                    }
+                }
+                if(!Strings.isNullOrEmpty(chapterFile.getPlayUrl())){
+                    String md5 = getMD5(chapterFile.getPlayUrl(),SALT);
+                    if(!globalMd5List.contains(md5)){
+                        return false;
+                    }
+                }
+                if(!Strings.isNullOrEmpty(chapterFile.getThumbUrl())){
+                    String md5 = getMD5(chapterFile.getThumbUrl(),SALT);
+                    if(!globalMd5List.contains(md5)){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
 //        ArrayList<ChapterInfo> chapterInfos = getChapterInfo("E:\\course\\0.FS未来素养课程\\0.欺凌预防\\0.识别欺凌(1)");
 //        System.out.println(chapterInfos.size());
@@ -303,7 +440,11 @@ public class CommonUtils {
 //        System.out.println(pre);
 
 
-        String value = calPathMD5("D:\\dev\\app\\javaWorkspace\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\1.识别欺凌(2)\\1.导入\\0.导入视频\\play.mp4");
-        System.out.println(value);
+//        String value = calPathMD5("D:\\dev\\app\\javaWorkspace\\JPlayer\\course\\0.FS未来素养课程\\0.欺凌预防\\1.识别欺凌(2)\\1.导入\\0.导入视频\\play.mp4");
+//        System.out.println(value);
+
+        System.out.println(getMD5("C:\\dev\\app\\JPlayer\\course\\0.FS未来素养课程\\01.欺凌预防\\01.识别欺凌1\\01.导入\\05.视频\\s.jpg",SALT));
+        System.out.println(getMD5("C:\\dev\\app\\JPlayer\\course\\0.FS未来素养课程\\01.欺凌预防\\01.识别欺凌1\\01.导入\\05.视频\\m.jpg",SALT));
+        System.out.println(getMD5("C:\\dev\\app\\JPlayer\\course\\0.FS未来素养课程\\01.欺凌预防\\01.识别欺凌1\\01.导入\\05.视频\\video.mp4",SALT));
     }
 }
